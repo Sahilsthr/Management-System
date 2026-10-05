@@ -1,11 +1,7 @@
 package com.furniture.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,44 +9,27 @@ import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name = "users")
-public class User {
-
+@Table(name = "clients")
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable=false)
     private String phone;
 
-
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
-
-    // Required by Hibernate
-    public User() {
+    private String address;
+    
+    public Client() {
     }
-
-    public User(String email, Long id, String name, String password, String phone, Role role) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.password = password;
-        this.phone = phone;
-        this.role = role;
-    }
-
+    
     public Long getId() {
         return id;
     }
@@ -83,19 +62,17 @@ public class User {
         this.phone = phone;
     }
 
-    public String getPassword() {
-        return password;
+    public String getAddress() {
+        return address;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAddress(String address) {
+        this.address = address;
     }
+    
 
-    public Role getRole() {
-        return role;
-    }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
+
+
+    
 }

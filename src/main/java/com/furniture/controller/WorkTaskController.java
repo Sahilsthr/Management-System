@@ -18,7 +18,7 @@ import com.furniture.service.WorkTaskService;
 @RestController
 public class WorkTaskController {
 
-    private WorkTaskService wts;
+    private final WorkTaskService wts;
 
     public WorkTaskController(WorkTaskService wts){
         this.wts = wts;

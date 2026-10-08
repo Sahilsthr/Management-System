@@ -7,7 +7,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "attendance_requests",
-       uniqueConstraints = @UniqueConstraint(columnNames = {"employee_id", "attendance_date"}))
+       uniqueConstraints = @UniqueConstraint(
+               columnNames = {"employee_id", "project_id", "attendance_date"}))
 public class AttendanceRequest {
 
     @Id
@@ -17,6 +18,10 @@ public class AttendanceRequest {
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
     @Column(nullable = false)
     private LocalDate attendanceDate;
@@ -52,6 +57,9 @@ public class AttendanceRequest {
 
     public Employee getEmployee() { return employee; }
     public void setEmployee(Employee employee) { this.employee = employee; }
+
+    public Project getProject() { return project; }
+    public void setProject(Project project) { this.project = project; }
 
     public LocalDate getAttendanceDate() { return attendanceDate; }
     public void setAttendanceDate(LocalDate attendanceDate) { this.attendanceDate = attendanceDate; }

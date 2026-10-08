@@ -12,7 +12,10 @@ public interface AttendanceRequestRepository extends JpaRepository<AttendanceReq
 
     List<AttendanceRequest> findByEmployeeId(Long employeeId);
 
+    List<AttendanceRequest> findByProjectId(Long projectId);
+
     List<AttendanceRequest> findByAttendanceRequestStatus(AttendanceRequestStatus attendanceRequestStatus);
 
-    boolean existsByEmployeeIdAndAttendanceDate(Long employeeId, LocalDate attendanceDate);
+    boolean existsByEmployeeIdAndProjectIdAndAttendanceDate(
+            Long employeeId, Long projectId, LocalDate attendanceDate);
 }

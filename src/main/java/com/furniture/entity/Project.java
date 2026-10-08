@@ -1,6 +1,7 @@
 package com.furniture.entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity 
@@ -22,6 +23,9 @@ public class Project {
 
     @Column(nullable=false)
     private LocalDate expectedEndDate;
+
+    @Column(precision=12,scale=2)
+    private BigDecimal totalAmount;
 
     @Enumerated(EnumType.STRING)
     @Column (nullable = false)
@@ -73,6 +77,14 @@ public class Project {
 
     public void setExpectedEndDate(LocalDate expectedEndDate) {
         this.expectedEndDate = expectedEndDate;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public ProjectStatus getProjectStatus() {

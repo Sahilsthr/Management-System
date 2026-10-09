@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.furniture.entity.Attendance;
 import com.furniture.entity.AttendanceRequest;
 import com.furniture.entity.AttendanceRequestStatus;
 import com.furniture.entity.Employee;
@@ -17,7 +16,6 @@ import com.furniture.repository.AttendanceRequestRepository;
 import com.furniture.repository.EmployeeRepository;
 import com.furniture.repository.ProjectRepository;
 import com.furniture.repository.UserRepository;
-import com.furniture.service.AttendanceService;
 
 
 @Service

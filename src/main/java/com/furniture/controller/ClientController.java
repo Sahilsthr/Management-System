@@ -35,7 +35,4 @@ public class ClientController {
     public Optional<Client> getClientById(@PathVariable Long id) {
         return clientService.getClientById(id);
     }
-    
-
-    
 }

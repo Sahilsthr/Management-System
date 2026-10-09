@@ -38,9 +38,4 @@ public class AttendanceController {
         return attendanceService.getAttendanceByDate(date);
     }
 
-
-
-
-
-    
 }

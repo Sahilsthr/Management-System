@@ -18,4 +18,6 @@ public interface AttendanceRequestRepository extends JpaRepository<AttendanceReq
 
     boolean existsByEmployeeIdAndProjectIdAndAttendanceDate(
             Long employeeId, Long projectId, LocalDate attendanceDate);
+    
+    Long countByAttendanceRequestStatus(AttendanceRequestStatus attendanceRequestStatus);
 }

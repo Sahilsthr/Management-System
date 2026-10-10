@@ -12,12 +12,18 @@ import com.furniture.entity.PaymentStatus;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
-    List<Payment> findByProjectId(Long projectId);
+   List<Payment> findByProjectId(Long projectId);
 
-    List<Payment> findByProjectIdAndPaymentStatus(Long projectId, PaymentStatus paymentStatus);
+   List<Payment> findByProjectIdAndPaymentStatus(Long projectId, PaymentStatus paymentStatus);
 
-    @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p " +
-       "WHERE p.project.id = :projectId AND p.paymentStatus = :paymentStatus")
-    BigDecimal sumAmountByProjectIdAndPaymentStatus(@Param("projectId") Long projectId,
+   @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p " +
+      "WHERE p.project.id = :projectId AND p.paymentStatus = :paymentStatus")
+   BigDecimal sumAmountByProjectIdAndPaymentStatus(@Param("projectId") Long projectId,
             @Param("paymentStatus") PaymentStatus paymentStatus);
+   
+   @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p " +
+         "WHERE p.paymentStatus = :paymentStatus")
+            BigDecimal sumAllByPaymentStatus(@Param("paymentStatus") PaymentStatus paymentStatus);
+
+
 }

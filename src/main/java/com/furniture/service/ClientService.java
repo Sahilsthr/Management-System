@@ -1,9 +1,12 @@
 package com.furniture.service;
 
-import com.furniture.entity.Client;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+
+import com.furniture.dto.CreateClientRequest;
+import com.furniture.entity.Client;
 import com.furniture.repository.ClientRepository;
 
 @Service
@@ -14,7 +17,12 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public Client createClient(Client client) {
+    public Client createClient(CreateClientRequest request) {
+        Client client = new Client();
+        client.setName(request.getName());
+        client.setPhone(request.getPhone());
+        client.setEmail(request.getEmail());
+        client.setAddress(request.getAddress());
         return clientRepository.save(client);
     }
 

@@ -1,8 +1,7 @@
 package com.furniture.controller;
 
 import java.util.List;
-import java.util.Optional;
-import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.furniture.dto.CreateClientRequest;
 import com.furniture.entity.Client;
 import com.furniture.service.ClientService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class ClientController {
@@ -32,7 +33,7 @@ public class ClientController {
     }
 
     @GetMapping("/api/clients/{id}")
-    public Optional<Client> getClientById(@PathVariable Long id) {
+    public Client getClientById(@PathVariable Long id) {
         return clientService.getClientById(id);
     }
 }

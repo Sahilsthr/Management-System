@@ -1,9 +1,6 @@
 package com.furniture.service;
-import com.furniture.repository.ClientRepository;
-
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -12,6 +9,7 @@ import com.furniture.entity.Project;
 import com.furniture.entity.ProjectStatus;
 import com.furniture.exception.BadRequestException;
 import com.furniture.exception.ResourceNotFoundException;
+import com.furniture.repository.ClientRepository;
 import com.furniture.repository.ProjectRepository;
 
 @Service

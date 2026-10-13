@@ -12,17 +12,8 @@ import com.furniture.entity.Project;
 @Service
 public class ClientViewService {
     private final ClientAccessService clientAccessService;
-    private final SiteService siteService;
-    private final PaymentService paymentService;
-    private final WorkTaskService workTaskService;
 
-    public ClientViewService(SiteService siteService,
-            PaymentService paymentService,
-            WorkTaskService workTaskService, ClientAccessService clientAccessService) {
-
-        this.siteService = siteService;
-        this.paymentService = paymentService;
-        this.workTaskService = workTaskService;
+    public ClientViewService(ClientAccessService clientAccessService) {
         this.clientAccessService = clientAccessService;
     }
 

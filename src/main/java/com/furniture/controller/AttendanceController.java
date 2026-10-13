@@ -1,10 +1,14 @@
 package com.furniture.controller;
 
-import org.springframework.web.bind.annotation.*;
-import com.furniture.entity.Attendance;
-
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.furniture.entity.Attendance;
 import com.furniture.service.AttendanceService;
 
 @RestController
@@ -21,7 +25,7 @@ public class AttendanceController {
         return attendanceService.getAllAttendance();
     }
     @GetMapping("/{id}")
-    public Optional<Attendance> getAttendanceById(@PathVariable Long id){
+    public Attendance getAttendanceById(@PathVariable Long id){
         return attendanceService.getAttendanceById(id);
 
     }

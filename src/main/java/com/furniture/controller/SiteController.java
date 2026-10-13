@@ -1,12 +1,11 @@
 package com.furniture.controller;
 
 import com.furniture.entity.Site;
+import com.furniture.exception.ResourceNotFoundException;
 import com.furniture.service.SiteService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-
 
 @RestController
 public class SiteController {
@@ -27,13 +26,13 @@ public class SiteController {
     }
 
     @GetMapping("/api/sites/{id}")
-    public Optional<Site> getSiteById(@PathVariable Long id) {
+    public Site getSiteById(@PathVariable Long id) {
         return siteService.getSiteById(id);
     }
 
     @GetMapping("/api/projects/{projectId}/site")
-    public Optional<Site> getSiteByProjectId(@PathVariable Long projectId) {
-        return siteService.getSiteByProjectId(projectId);
+    public Site getSiteByProjectId(@PathVariable Long projectId) {
+        return siteService.getSiteByProjectId(projectId).orElseThrow(() -> new ResourceNotFoundException("Site not found for project " + projectId));
     }
     
 }

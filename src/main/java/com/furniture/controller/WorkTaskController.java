@@ -1,7 +1,6 @@
 package com.furniture.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +35,7 @@ public class WorkTaskController {
     }
 
     @GetMapping("/api/tasks/{id}")
-    public Optional<WorkTask> getTaskById(@PathVariable Long id) {
+    public WorkTask getTaskById(@PathVariable Long id) {
         return workTaskService.getTaskById(id);
     }
     @PutMapping("/api/tasks/{id}/status")

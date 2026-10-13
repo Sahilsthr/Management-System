@@ -1,7 +1,6 @@
 package com.furniture.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +36,7 @@ public class AttendanceRequestController {
     }
 
     @GetMapping("/{id}")
-    public Optional<AttendanceRequest> getRequestById(@PathVariable Long id) {
+    public AttendanceRequest getRequestById(@PathVariable Long id) {
         return attendanceRequestService.getRequestById(id);
     }
 

@@ -1,8 +1,6 @@
 package com.furniture.controller;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +29,7 @@ public class ProjectEmployeeController {
     }
 
     @GetMapping("/api/assignments/{id}")
-    public Optional<ProjectEmployee> getAssignmentById(@PathVariable Long id) {
+    public ProjectEmployee getAssignmentById(@PathVariable Long id) {
         return proS.getAssignmentById(id);
     }
     

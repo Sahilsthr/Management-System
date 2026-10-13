@@ -2,13 +2,14 @@ package com.furniture.service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.furniture.entity.Attendance;
 import com.furniture.entity.AttendanceRequest;
 import com.furniture.entity.AttendanceStatus;
+import com.furniture.exception.DuplicateResourceException;
+import com.furniture.exception.ResourceNotFoundException;
 import com.furniture.repository.AttendanceRepository;
 
 @Service
@@ -29,7 +30,7 @@ public class AttendanceService {
                         request.getAttendanceDate());
 
         if (exists) {
-            throw new RuntimeException(
+            throw new DuplicateResourceException(
                     "Attendance already exists for this employee, project and date");
         }
 
@@ -47,9 +48,10 @@ public class AttendanceService {
         return attendanceRepository.findAll();
     }
 
-    public Optional<Attendance> getAttendanceById(Long id) {
-        return attendanceRepository.findById(id);
-    }
+    public Attendance getAttendanceById(Long id) {
+    return attendanceRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Attendance not found with id " + id));
+}
 
     public List<Attendance> getAttendanceByEmployee(Long employeeId) {
         return attendanceRepository.findByEmployeeId(employeeId);

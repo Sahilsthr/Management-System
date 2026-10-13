@@ -1,19 +1,19 @@
 package com.furniture.controller;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-import org.springframework.web.bind.annotation.RestController;
-
-import com.furniture.service.PaymentService;
-import com.furniture.entity.Payment;
-import com.furniture.entity.PaymentStatus;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.furniture.entity.Payment;
+import com.furniture.entity.PaymentStatus;
+import com.furniture.service.PaymentService;
 
 @RestController
 public class PaymentController {
@@ -33,7 +33,7 @@ public class PaymentController {
         return paymentService.getAllPayment();
     }
     @GetMapping("/api/payments/{id}")
-    public Optional<Payment> getPaymentById(@PathVariable Long id) {
+    public Payment getPaymentById(@PathVariable Long id) {
         return paymentService.getPaymentById(id);
     }
     @PutMapping("/api/payments/{id}/status")

@@ -1,7 +1,6 @@
 package com.furniture.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +32,7 @@ public class ProjectController {
         return projectService.getAllProject();
     }
     @GetMapping("/api/projects/{id}")
-    public Optional<Project> getProjectById(@PathVariable Long id){
+    public Project getProjectById(@PathVariable Long id){
         return projectService.getProjectById(id);
     }
     

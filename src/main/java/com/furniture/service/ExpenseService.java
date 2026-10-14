@@ -1,18 +1,17 @@
 package com.furniture.service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.furniture.dto.CreateExpenseRequest;
 import com.furniture.entity.Expense;
 import com.furniture.entity.ExpenseCategory;
 import com.furniture.entity.PaymentStatus;
 import com.furniture.entity.Project;
-import com.furniture.exception.BadRequestException;
 import com.furniture.exception.ResourceNotFoundException;
 import com.furniture.repository.ExpenseRepository;
 import com.furniture.repository.PaymentRepository;
@@ -29,38 +28,20 @@ public class ExpenseService {
         this.projectRepository = projectRepository;
         this.paymentRepository = paymentRepository;
     }
-    public Expense addExpense(Expense expense){
-        if (expense.getProject() == null || expense.getProject().getId() == null) {
-            throw new BadRequestException("project.id is required");
-        }
-        if (expense.getAmount() == null) {
-            throw new BadRequestException("amount is required");
-        }
-        if (expense.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BadRequestException("amount must be greater than 0");
-        }
-        if (expense.getCategory() == null) {
-            throw new BadRequestException("category is required");
-        }
-        if (expense.getExpenseDate() == null) {
-            throw new BadRequestException("expenseDate is required");
-        }
-        if (expense.getExpenseDate().isAfter(LocalDate.now())) {
-            throw new BadRequestException("expenseDate cannot be in the future");
-        }
-        if (expense.getDescription() != null && expense.getDescription().length() > 500) {
-            throw new BadRequestException("description must be at most 500 characters");
-        }
+    public Expense addExpense(CreateExpenseRequest request) {
+        Project project = projectRepository.findById(request.getProjectId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Project not found with id " + request.getProjectId()));
 
-        Long projectId = expense.getProject().getId();
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + projectId));
-
-        expense.setId(null);
+        Expense expense = new Expense();
         expense.setProject(project);
-
+        expense.setAmount(request.getAmount());
+        expense.setCategory(request.getCategory());
+        expense.setDescription(request.getDescription());
+        expense.setExpenseDate(request.getExpenseDate());
         return expenseRepository.save(expense);
     }
+
     public List<Expense> getAllExpense() {
         return expenseRepository.findAll();
     }

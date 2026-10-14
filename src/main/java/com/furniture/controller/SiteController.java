@@ -1,11 +1,19 @@
 package com.furniture.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.furniture.dto.CreateSiteRequest;
 import com.furniture.entity.Site;
 import com.furniture.exception.ResourceNotFoundException;
 import com.furniture.service.SiteService;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 public class SiteController {
@@ -16,8 +24,8 @@ public class SiteController {
     }
 
     @PostMapping("/api/sites")
-    public Site createSite(@RequestBody Site site) {
-        return siteService.createSite(site);
+    public Site createSite(@Valid @RequestBody CreateSiteRequest request) {
+        return siteService.createSite(request);
     }
 
     @GetMapping("/api/sites")

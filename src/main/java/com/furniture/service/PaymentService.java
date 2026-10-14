@@ -13,6 +13,7 @@ import com.furniture.exception.BadRequestException;
 import com.furniture.exception.ResourceNotFoundException;
 import com.furniture.repository.PaymentRepository;
 import com.furniture.repository.ProjectRepository;
+import com.furniture.dto.CreatePaymentRequest;
 
 @Service
 public class PaymentService {
@@ -21,41 +22,32 @@ public class PaymentService {
     private final ProjectRepository projectRepository;
 
     public PaymentService(PaymentRepository paymentRepository,
-                          ProjectRepository projectRepository) {
+ProjectRepository projectRepository) {
         this.paymentRepository = paymentRepository;
         this.projectRepository = projectRepository;
     }
 
-    public Payment addPayment(Payment payment) {
-        if (payment.getProject() == null || payment.getProject().getId() == null) {
-            throw new BadRequestException("project.id is required");
-        }
-        if (payment.getAmount() == null) {
-            throw new BadRequestException("amount is required");
-        }
-        if (payment.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BadRequestException("amount must be greater than 0");
-        }
-        if (payment.getPaymentDate() == null) {
-            throw new BadRequestException("paymentDate is required");
-        }
-        if (payment.getPaymentMethod() == null) {
-            throw new BadRequestException("paymentMethod is required");
+    public Payment addPayment(CreatePaymentRequest request) {
+        
+        Project project = projectRepository.findById(request.getProjectId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Project not found with id " + request.getProjectId()));
+
+        PaymentStatus status = request.getPaymentStatus() != null
+                ? request.getPaymentStatus()
+                : PaymentStatus.PAID;
+
+        if (status == PaymentStatus.PAID) {
+            checkNotOverpaid(project, request.getAmount());
         }
 
-        Long projectId = payment.getProject().getId();
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + projectId));
-
-        if (payment.getPaymentStatus() == null) {
-            payment.setPaymentStatus(PaymentStatus.PAID);
-        }
-        if (payment.getPaymentStatus() == PaymentStatus.PAID) {
-            checkNotOverpaid(project, payment.getAmount());
-        }
-
-        payment.setId(null);
+        Payment payment = new Payment();
         payment.setProject(project);
+        payment.setAmount(request.getAmount());
+        payment.setPaymentDate(request.getPaymentDate());
+        payment.setPaymentMethod(request.getPaymentMethod());
+        payment.setPaymentStatus(status);
+        payment.setRemark(request.getRemarks());
         return paymentRepository.save(payment);
     }
 

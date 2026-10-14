@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import com.furniture.dto.CreateUserRequest;
 
 import com.furniture.entity.User;
 import com.furniture.service.UserService;
@@ -22,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/api/users")
-    public User createUser(@RequestBody User user) {
+    public User createUser(@Valid @RequestBody CreateUserRequest user) {
         return userService.createUser(user);
     }
 

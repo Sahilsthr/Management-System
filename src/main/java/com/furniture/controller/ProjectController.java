@@ -2,14 +2,17 @@ package com.furniture.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import com.furniture.service.ProjectService;
-import com.furniture.entity.Project;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.furniture.dto.CreateProjectRequest;
+import com.furniture.entity.Project;
+import com.furniture.service.ProjectService;
+
+import jakarta.validation.Valid;
 
 
 
@@ -23,8 +26,8 @@ public class ProjectController {
 
     }
     @PostMapping("/api/projects")
-    public Project createProject(@RequestBody Project project){
-        return projectService.createProject(project);
+    public Project createProject(@Valid @RequestBody CreateProjectRequest request){
+        return projectService.createProject(request);
     }
     
     @GetMapping("/api/projects")

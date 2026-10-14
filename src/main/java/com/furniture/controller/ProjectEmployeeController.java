@@ -1,14 +1,18 @@
 package com.furniture.controller;
 
 import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.furniture.dto.AssignEmployeeRequest;
 import com.furniture.entity.ProjectEmployee;
 import com.furniture.service.ProjectEmployeeService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class ProjectEmployeeController {
@@ -19,7 +23,7 @@ public class ProjectEmployeeController {
     }
 
     @PostMapping("/api/assignments")
-    public ProjectEmployee assignEmployee(@RequestBody ProjectEmployee pes) {
+    public ProjectEmployee assignEmployee(@Valid @RequestBody AssignEmployeeRequest pes) {
         return proS.assignEmployee(pes);
     }
 

@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.furniture.dto.CreateEmployeeRequest;
 import com.furniture.entity.Employee;
 import com.furniture.entity.User;
-import com.furniture.exception.BadRequestException;
 import com.furniture.exception.DuplicateResourceException;
 import com.furniture.exception.ResourceNotFoundException;
 import com.furniture.repository.EmployeeRepository;
@@ -23,34 +23,25 @@ public class EmployeeService {
         this.userRepository = userRepository;
     }
 
-    public Employee createEmployee(Employee employee) {
-    if (employee.getEmployeeCode() == null || employee.getEmployeeCode().isBlank()) {
-        throw new BadRequestException("employeeCode is required");
-    }
-    if (employee.getDesignation() == null || employee.getDesignation().isBlank()) {
-        throw new BadRequestException("designation is required");
-    }
-    if (employee.getJoiningDate() == null) {
-        throw new BadRequestException("joiningDate is required");
-    }
-    if (employee.getUser() == null || employee.getUser().getId() == null) {
-        throw new BadRequestException("user.id is required");
-    }
+    public Employee createEmployee(CreateEmployeeRequest request) {
+    User user = userRepository.findById(request.getUserId())
+            .orElseThrow(() -> new ResourceNotFoundException(
+                    "User not found with id " + request.getUserId()));
 
-    Long userId = employee.getUser().getId();
-    User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
-
-    if (employeeRepository.existsByUserId(userId)) {
+    if (employeeRepository.existsByUserId(request.getUserId())) {
         throw new DuplicateResourceException("Employee already exists for this user");
     }
-    if (employeeRepository.existsByEmployeeCode(employee.getEmployeeCode())) {
+    if (employeeRepository.existsByEmployeeCode(request.getEmployeeCode())) {
         throw new DuplicateResourceException("Employee code already exists");
     }
 
+    Employee employee = new Employee();
+    employee.setEmployeeCode(request.getEmployeeCode());
+    employee.setDesignation(request.getDesignation());
+    employee.setJoiningDate(request.getJoiningDate());
     employee.setUser(user);
     return employeeRepository.save(employee);
-}
+    }
 
     public List<Employee> getAllEmployee() {
         return employeeRepository.findAll();

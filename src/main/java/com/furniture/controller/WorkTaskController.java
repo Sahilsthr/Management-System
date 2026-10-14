@@ -1,6 +1,7 @@
 package com.furniture.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,11 +9,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.Map;
 
 import com.furniture.entity.TaskStatus;
+import jakarta.validation.Valid;
 import com.furniture.entity.WorkTask;
 import com.furniture.service.WorkTaskService;
+import com.furniture.dto.CreateTaskRequest;
 
 
 @RestController
@@ -25,7 +27,7 @@ public class WorkTaskController {
     }
     
     @PostMapping("/api/tasks")
-    public WorkTask createTask(@RequestBody WorkTask workTask){
+    public WorkTask createTask(@Valid @RequestBody CreateTaskRequest workTask){
         return workTaskService.createTask(workTask);
     }
 

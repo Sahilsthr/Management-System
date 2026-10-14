@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import com.furniture.entity.Employee;
 import com.furniture.entity.Project;
 import com.furniture.entity.ProjectEmployee;
-import com.furniture.exception.BadRequestException;
 import com.furniture.exception.DuplicateResourceException;
 import com.furniture.exception.ResourceNotFoundException;
 import com.furniture.repository.EmployeeRepository;
 import com.furniture.repository.ProjectEmployeeRepository;
 import com.furniture.repository.ProjectRepository;
+import com.furniture.dto.AssignEmployeeRequest;
 
 @Service
 public class ProjectEmployeeService {
@@ -29,25 +29,20 @@ public class ProjectEmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public ProjectEmployee assignEmployee(ProjectEmployee pe) {
-        if (pe.getProject() == null || pe.getProject().getId() == null) {
-            throw new BadRequestException("project.id is required");
-        }
-        if (pe.getEmployee() == null || pe.getEmployee().getId() == null) {
-            throw new BadRequestException("employee.id is required");
-        }
+    public ProjectEmployee assignEmployee(AssignEmployeeRequest request) {
+        Project project = projectRepository.findById(request.getProjectId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Project not found with id " + request.getProjectId()));
+        Employee employee = employeeRepository.findById(request.getEmployeeId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Employee not found with id " + request.getEmployeeId()));
 
-        Long projectId = pe.getProject().getId();
-        Long employeeId = pe.getEmployee().getId();
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + projectId));
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + employeeId));
-
-        if (projectEmployeeRepository.existsByProjectIdAndEmployeeId(projectId, employeeId)) {
+        if (projectEmployeeRepository.existsByProjectIdAndEmployeeId(
+                request.getProjectId(), request.getEmployeeId())) {
             throw new DuplicateResourceException("Employee already assigned to this project");
         }
-        
+
+        ProjectEmployee pe = new ProjectEmployee();
         pe.setProject(project);
         pe.setEmployee(employee);
         return projectEmployeeRepository.save(pe);

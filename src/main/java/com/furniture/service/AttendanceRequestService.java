@@ -20,6 +20,7 @@ import com.furniture.repository.EmployeeRepository;
 import com.furniture.repository.ProjectEmployeeRepository;
 import com.furniture.repository.ProjectRepository;
 import com.furniture.repository.UserRepository;
+import com.furniture.dto.CreateAttendanceRequestDto;
 
 
 @Service
@@ -46,41 +47,30 @@ public class AttendanceRequestService {
         this.attendanceService = attendanceService;
     }
 
-    public AttendanceRequest createRequest(AttendanceRequest ar) {
-        if (ar.getEmployee() == null || ar.getEmployee().getId() == null) {
-            throw new BadRequestException("employee.id is required");
-        }
-        if (ar.getProject() == null || ar.getProject().getId() == null) {
-            throw new BadRequestException("project.id is required");
-        }
-        if (ar.getAttendanceDate() == null) {
-            throw new BadRequestException("attendanceDate is required");
-        }
-        if (ar.getAttendanceDate().isAfter(LocalDate.now())) {
-            throw new BadRequestException("attendanceDate cannot be in the future");
-        }
+    public AttendanceRequest createRequest(CreateAttendanceRequestDto request) {
+        Long employeeId = request.getEmployeeId();
+        Long projectId = request.getProjectId();
 
-        Long employeeId = ar.getEmployee().getId();
-        Long projectId = ar.getProject().getId();
         Employee employee = employeeRepository.findById(employeeId)
-            .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + employeeId));
-
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Employee not found with id " + employeeId));
         Project project = projectRepository.findById(projectId)
-            .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + projectId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Project not found with id " + projectId));
+
         if (!projectEmployeeRepository.existsByProjectIdAndEmployeeId(projectId, employeeId)) {
             throw new BadRequestException("Employee is not assigned to this project");
         }
         if (attendanceRequestRepository.existsByEmployeeIdAndProjectIdAndAttendanceDate(
-                employeeId, projectId, ar.getAttendanceDate())) {
+                employeeId, projectId, request.getAttendanceDate())) {
             throw new DuplicateResourceException("Attendance request already exists for this date");
         }
 
+        AttendanceRequest ar = new AttendanceRequest();
         ar.setEmployee(employee);
         ar.setProject(project);
+        ar.setAttendanceDate(request.getAttendanceDate());
         ar.setAttendanceRequestStatus(AttendanceRequestStatus.PENDING);
-        ar.setReviewedBy(null);
-        ar.setReviewedAt(null);
-        ar.setRemark(null);
         return attendanceRequestRepository.save(ar);
     }
     @Transactional

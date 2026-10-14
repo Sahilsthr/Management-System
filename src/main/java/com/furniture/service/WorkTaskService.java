@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.furniture.dto.CreateTaskRequest;
 import com.furniture.entity.Employee;
 import com.furniture.entity.Project;
 import com.furniture.entity.TaskPriority;
@@ -36,40 +37,35 @@ public WorkTaskService(WorkTaskRepository workTaskRepository,
                 this.projectEmployeeRepository = projectEmployeeRepository;
     }
 
-    public WorkTask createTask(WorkTask task) {
-        if (task.getTaskName() == null || task.getTaskName().isBlank()) {
-            throw new BadRequestException("taskName is required");
-        }
-        if (task.getStatus() == null) {
-            task.setStatus(TaskStatus.PENDING);
-        }
-        if (task.getPriority() == null) {
-            task.setPriority(TaskPriority.MEDIUM);
-        }
-        if (task.getProject() == null || task.getProject().getId() == null) {
-            throw new BadRequestException("project.id is required");
-        }
+    public WorkTask createTask(CreateTaskRequest request) {
+        Project project = projectRepository.findById(request.getProjectId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Project not found with id " + request.getProjectId()));
 
-        Long projectId = task.getProject().getId();
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + projectId));
-
-        if (task.getAssignedEmployee() != null && task.getAssignedEmployee().getId() != null) {
-            Long employeeId = task.getAssignedEmployee().getId();
-            Employee employee = employeeRepository.findById(employeeId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + employeeId));
-            if (!projectEmployeeRepository.existsByProjectIdAndEmployeeId(projectId, employeeId)) {
+        Employee employee = null;
+        if (request.getAssignedEmployeeId() != null) {
+            Long employeeId = request.getAssignedEmployeeId();
+            employee = employeeRepository.findById(employeeId)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Employee not found with id " + employeeId));
+            if (!projectEmployeeRepository.existsByProjectIdAndEmployeeId(
+                    request.getProjectId(), employeeId)) {
                 throw new BadRequestException("Employee is not assigned to this project");
             }
-            task.setAssignedEmployee(employee);
-        } else {
-            task.setAssignedEmployee(null);
         }
 
+        WorkTask task = new WorkTask();
+        task.setTaskName(request.getTaskName());
+        task.setDescription(request.getDescription());
+        task.setDueDate(request.getDueDate());
+        task.setPriority(request.getPriority() != null
+                ? request.getPriority()
+                : TaskPriority.MEDIUM);
+        task.setStatus(TaskStatus.PENDING);
         task.setProject(project);
+        task.setAssignedEmployee(employee);
         return workTaskRepository.save(task);
     }
-
     public List<WorkTask> getAllTask() {
         return workTaskRepository.findAll();
     }

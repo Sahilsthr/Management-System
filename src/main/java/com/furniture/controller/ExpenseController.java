@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.furniture.dto.CreateExpenseRequest;
 import com.furniture.entity.Expense;
 import com.furniture.entity.ExpenseCategory;
 import com.furniture.service.ExpenseService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class ExpenseController {
@@ -23,8 +26,8 @@ public class ExpenseController {
     }
 
     @PostMapping("/api/expenses")
-    public Expense addExpense(@RequestBody Expense expense) {
-        return expenseService.addExpense(expense);
+    public Expense addExpense(@Valid @RequestBody CreateExpenseRequest request) {
+        return expenseService.addExpense(request);
     }
 
     @GetMapping("/api/expenses")

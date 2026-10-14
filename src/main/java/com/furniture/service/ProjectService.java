@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.furniture.dto.CreateProjectRequest;
 import com.furniture.entity.Client;
 import com.furniture.entity.Project;
 import com.furniture.entity.ProjectStatus;
@@ -22,35 +23,27 @@ public class ProjectService {
         this.clientRepository = clientRepository;
     }
 
-    public Project createProject(Project project) {
-        if (project.getProjectName() == null) {
-            throw new BadRequestException("Project name is required");
-        }
-        if (project.getStartDate() == null) {
-            throw new BadRequestException("StartDate is Required");
-        }
-        if (project.getExpectedEndDate() == null) {
-            throw new BadRequestException("Expected End Date is Required");
-        }
-        if (project.getExpectedEndDate().isBefore(project.getStartDate())) {
-            throw new BadRequestException("End date not to be before Start date");
-        }
-        if (project.getProjectStatus() == null) {
-            project.setProjectStatus(ProjectStatus.PLANNED);
-        }
-        if(project.getTotalAmount() != null && project.getTotalAmount().compareTo(BigDecimal.ZERO) < 0){
-            throw new BadRequestException("Total Amount cannot be negative");
-        }
-        if(project.getClient() == null || project.getClient().getId() == null){
-            throw new BadRequestException("Client Id is Required");
-        }
-        Long clientId = project.getClient().getId();
-        Client client = clientRepository.findById(clientId)
-                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id " + clientId));
+    public Project createProject(CreateProjectRequest request) {
+        Client client = clientRepository.findById(request.getClientId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Client not found with id " + request.getClientId()));
 
+        if (request.getExpectedEndDate().isBefore(request.getStartDate())) {
+            throw new BadRequestException("expectedEndDate cannot be before startDate");
+        }
+
+        Project project = new Project();
+        project.setProjectName(request.getProjectName());
+        project.setDescription(request.getDescription());
+        project.setStartDate(request.getStartDate());
+        project.setExpectedEndDate(request.getExpectedEndDate());
+        String projectStatus = request.getProjectStatus();
+        project.setProjectStatus(projectStatus != null && !projectStatus.isBlank()
+                ? ProjectStatus.valueOf(projectStatus.trim().toUpperCase())
+                : ProjectStatus.PLANNED);
+        project.setTotalAmount(request.getTotalAmount());
         project.setClient(client);
         return projectRepository.save(project);
-        
     }
 
     public List<Project> getAllProject() {

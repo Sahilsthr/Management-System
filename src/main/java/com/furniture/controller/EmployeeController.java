@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.furniture.dto.CreateEmployeeRequest;
 import com.furniture.entity.Employee;
 import com.furniture.service.EmployeeService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class EmployeeController {
@@ -21,7 +24,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/api/employees")
-    public Employee createEmployee(@RequestBody Employee employee) {
+    public Employee createEmployee(@Valid @RequestBody CreateEmployeeRequest employee) {
         System.out.println("RECEIVED designation=" + employee.getDesignation());
         return employeeService.createEmployee(employee);
     }

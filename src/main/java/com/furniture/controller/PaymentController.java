@@ -11,9 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.furniture.dto.CreatePaymentRequest;
 import com.furniture.entity.Payment;
 import com.furniture.entity.PaymentStatus;
 import com.furniture.service.PaymentService;
+
+import jakarta.validation.Valid;
+
 
 @RestController
 public class PaymentController {
@@ -24,8 +28,8 @@ public class PaymentController {
     }
 
     @PostMapping("/api/payments")
-    public Payment addPayment(@RequestBody Payment payment) {
-        return paymentService.addPayment(payment);
+    public Payment addPayment(@Valid @RequestBody CreatePaymentRequest request) {
+        return paymentService.addPayment(request);
     }
 
     @GetMapping("/api/payments")

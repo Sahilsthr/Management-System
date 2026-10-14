@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.furniture.entity.ProjectStatus;
+import com.furniture.exception.ResourceNotFoundException;
 import com.furniture.entity.PaymentStatus;
 import com.furniture.entity.Project;
 import com.furniture.entity.AttendanceRequestStatus;
@@ -71,7 +72,8 @@ public class DashboardService {
         return adminDashboard;
     }
     public Map<String, Object> getProjectDashboard(Long projectId) {
-        Project project = projectRepository.findById(projectId).orElse(null);
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + projectId));
 
         Map<String, Object> projectDashboard = new LinkedHashMap<>();
         projectDashboard.put("projectId", projectId);
@@ -84,7 +86,6 @@ public class DashboardService {
 
         return projectDashboard;
     }
-
 
     
 }

@@ -20,7 +20,7 @@ public class ClientAccessController {
 
     //admin endpoints
     @PostMapping("/api/projects/{projectId}/client-access")
-    public ClientAccess createAccess(@PathVariable Long projectId,@RequestParam(defaultValue="30") int validDays){
+        public ClientAccess createAccess(@PathVariable Long projectId, @RequestParam(defaultValue = "30") int validDays) {
         return clientAccessService.createAccess(projectId, validDays);
     }
     @GetMapping("/api/projects/{projectId}/client-access")

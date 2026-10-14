@@ -2,7 +2,6 @@ package com.furniture.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +32,7 @@ public class ExpenseController {
         return expenseService.getAllExpense();
     }
     @GetMapping("/api/expenses/{id}")
-    public Optional<Expense> getExpenseById(@PathVariable Long id) {
+    public Expense getExpenseById(@PathVariable Long id) {
         return expenseService.getExpenseById(id);
     }
 

@@ -2,6 +2,7 @@ package com.furniture.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +30,12 @@ public class AttendanceRequestController {
     }
 
     @PostMapping
-    public AttendanceRequest createRequest(@Valid @RequestBody CreateAttendanceRequestDto request) {
-        return attendanceRequestService.createRequest(request);
+    public AttendanceRequest createRequest(
+            @Valid @RequestBody CreateAttendanceRequestDto request,
+            Authentication authentication) {
+
+        return attendanceRequestService.createRequest(
+                request, authentication.getName());
     }
 
     @GetMapping
@@ -49,23 +54,24 @@ public class AttendanceRequestController {
     }
 
     @GetMapping("/employee/{employeeId}")
-    public List<AttendanceRequest> getRequestsByEmployee(@PathVariable Long employeeId) {
-        return attendanceRequestService.getRequestsByEmployee(employeeId);
+    public List<AttendanceRequest> getRequestsByEmployee(@PathVariable Long employeeId, Authentication authentication) {
+        return attendanceRequestService.getRequestsByEmployee(employeeId, authentication.getName());
     }
 
     @PutMapping("/{id}/approve")
     public AttendanceRequest approveRequest(
             @PathVariable Long id,
-            @RequestParam Long reviewerId,
-            @RequestParam(required = false) String remark) {
-        return attendanceRequestService.approveRequest(id, reviewerId, remark);
+            @RequestParam(required = false) String remark, Authentication authentication) {
+        return attendanceRequestService.approveRequest(id, authentication.getName(), remark);
     }
 
     @PutMapping("/{id}/reject")
     public AttendanceRequest rejectRequest(
             @PathVariable Long id,
-            @RequestParam Long reviewerId,
-            @RequestParam(required = false) String remark) {
-        return attendanceRequestService.rejectRequest(id, reviewerId, remark);
+            @RequestParam(required = false) String remark,
+            Authentication authentication) {
+
+        return attendanceRequestService.rejectRequest(
+                id, authentication.getName(), remark);
     }
 }

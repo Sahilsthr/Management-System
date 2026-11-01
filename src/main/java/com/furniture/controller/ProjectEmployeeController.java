@@ -2,6 +2,7 @@ package com.furniture.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,5 +47,12 @@ public class ProjectEmployeeController {
     public List<ProjectEmployee> getAssignmentByEmployee(@PathVariable Long employeeId){
         return proS.getAssignmentByEmployee(employeeId);
 
+    }
+    @DeleteMapping("/api/assignments/project/{projectId}/employee/{employeeId}")
+    public void unassignEmployee(
+        @PathVariable Long projectId,
+        @PathVariable Long employeeId){
+            
+        proS.unassignEmployee(projectId, employeeId);
     }
 }

@@ -2,6 +2,7 @@ package com.furniture.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,8 @@ import com.furniture.entity.Project;
 import com.furniture.service.ProjectService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -37,6 +40,10 @@ public class ProjectController {
     @GetMapping("/api/projects/{id}")
     public Project getProjectById(@PathVariable Long id){
         return projectService.getProjectById(id);
+    }
+    @GetMapping("/api/projects/my")
+    public List<Project> getMyProjects(Authentication authentication) {
+        return projectService.getMyProjects(authentication.getName());
     }
     
 }

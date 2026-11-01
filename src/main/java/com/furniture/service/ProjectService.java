@@ -11,16 +11,28 @@ import com.furniture.entity.ProjectStatus;
 import com.furniture.exception.BadRequestException;
 import com.furniture.exception.ResourceNotFoundException;
 import com.furniture.repository.ClientRepository;
+import com.furniture.entity.Employee;
+import com.furniture.entity.User;
+import com.furniture.entity.ProjectEmployee;
+import com.furniture.repository.EmployeeRepository;
+import com.furniture.repository.ProjectEmployeeRepository;
 import com.furniture.repository.ProjectRepository;
+import com.furniture.repository.UserRepository;
 
 @Service
 public class ProjectService {
     private final ClientRepository clientRepository;
     private final ProjectRepository projectRepository;
+    private final EmployeeRepository employeeRepository;
+    private final ProjectEmployeeRepository projectEmployeeRepository;
+    private final UserRepository userRepository;
 
-    public ProjectService(ProjectRepository projectRepository, ClientRepository clientRepository) {
+    public ProjectService(ProjectRepository projectRepository, ClientRepository clientRepository,EmployeeRepository employeeRepository,ProjectEmployeeRepository projectEmployeeRepository,UserRepository userRepository) {
         this.projectRepository = projectRepository;
         this.clientRepository = clientRepository;
+        this.employeeRepository = employeeRepository;
+        this.projectEmployeeRepository = projectEmployeeRepository;
+        this.userRepository = userRepository;
     }
 
     public Project createProject(CreateProjectRequest request) {
@@ -49,6 +61,22 @@ public class ProjectService {
     public List<Project> getAllProject() {
         return projectRepository.findAll();
     }
+    private Employee getEmployeeByEmail(String email){
+
+        User user = userRepository.findByEmailIgnoreCase(email).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+
+        return employeeRepository.findByUser_Id(user.getId()).orElseThrow(()-> new ResourceNotFoundException("Employee profile not found"));
+    }
+    public List<Project> getMyProjects(String email) {
+    Employee employee = getEmployeeByEmail(email);
+
+    List<ProjectEmployee> assignments =
+            projectEmployeeRepository.findByEmployeeId(employee.getId());
+
+    return assignments.stream()
+            .map(ProjectEmployee::getProject)
+            .toList();
+}
 
     public Project getProjectById(Long id) {
     return projectRepository.findById(id)

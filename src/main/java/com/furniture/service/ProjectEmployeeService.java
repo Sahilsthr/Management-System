@@ -13,6 +13,7 @@ import com.furniture.repository.EmployeeRepository;
 import com.furniture.repository.ProjectEmployeeRepository;
 import com.furniture.repository.ProjectRepository;
 import com.furniture.dto.AssignEmployeeRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProjectEmployeeService {
@@ -62,5 +63,13 @@ public class ProjectEmployeeService {
 
     public List<ProjectEmployee> getAssignmentByEmployee(Long employeeId) {
         return projectEmployeeRepository.findByEmployeeId(employeeId);
+    }
+    @Transactional
+    public void unassignEmployee(Long projectId, Long employeeId){
+        if(!projectEmployeeRepository.existsByProjectIdAndEmployeeId(projectId, employeeId)){
+            throw new ResourceNotFoundException("Employee is not assigned to this project");
+        }
+
+        projectEmployeeRepository.deleteByProjectIdAndEmployeeId(projectId, employeeId);
     }
 }

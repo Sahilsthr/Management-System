@@ -20,22 +20,22 @@ import jakarta.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
+        }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session ->
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .formLogin(form -> form.disable())
-            .httpBasic(basic -> basic.disable())
-            .authorizeHttpRequests(auth -> auth
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
+                .authorizeHttpRequests(auth -> auth
                 // Public
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .requestMatchers("/api/client-view/**").permitAll()
@@ -53,12 +53,15 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/api/tasks/*/status")
                         .hasAnyRole("ADMIN", "EMPLOYEE")
 
+                // Employee and Admin - My Projects
+                .requestMatchers(HttpMethod.GET, "/api/projects/my")
+                        .hasAnyRole("ADMIN", "EMPLOYEE")
+
                 // Baaki saari APIs sirf ADMIN
                 .requestMatchers("/api/**").hasRole("ADMIN")
-
-                // Jo kuch bacha
-                .anyRequest().authenticated()
-                )
+                                // Jo kuch bacha
+                                .anyRequest().authenticated()
+                        )
                 .exceptionHandling(exception -> exception
                 .authenticationEntryPoint((request, response, ex) ->
                         writeError(response, 401, "Login required or token invalid"))
@@ -66,6 +69,7 @@ public class SecurityConfig {
                         writeError(response, 403, "You do not have permission to do this"))
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                
 
         return http.build();
         }

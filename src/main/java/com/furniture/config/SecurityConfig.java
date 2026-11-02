@@ -48,7 +48,7 @@ public class SecurityConfig {
                         .hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.GET, "/api/attendance-requests/employee/**")
                         .hasAnyRole("ADMIN", "EMPLOYEE")
-                .requestMatchers(HttpMethod.GET, "/api/tasks/**")
+                .requestMatchers(HttpMethod.GET, "/api/tasks/my")
                         .hasAnyRole("ADMIN", "EMPLOYEE")
                 .requestMatchers(HttpMethod.PUT, "/api/tasks/*/status")
                         .hasAnyRole("ADMIN", "EMPLOYEE")

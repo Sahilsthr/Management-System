@@ -1,5 +1,8 @@
 package com.furniture.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.furniture.entity.TaskStatus;
@@ -9,5 +12,7 @@ public interface WorkTaskRepository extends JpaRepository<WorkTask, Long>{
     
     long countByProjectId(Long projectId);
     long countByProjectIdAndStatus(Long projectId, TaskStatus status);
+    List<WorkTask> findByAssignedEmployeeId(Long employeeId);
+    Optional<WorkTask> findByIdAndAssignedEmployeeId(Long id, Long employeeId);
     
 }

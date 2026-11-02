@@ -12,6 +12,7 @@ import com.furniture.entity.Employee;
 import com.furniture.entity.Project;
 import com.furniture.entity.TaskPriority;
 import com.furniture.entity.TaskStatus;
+import com.furniture.entity.User;
 import com.furniture.entity.WorkTask;
 import com.furniture.exception.BadRequestException;
 import com.furniture.exception.ResourceNotFoundException;
@@ -19,6 +20,7 @@ import com.furniture.repository.EmployeeRepository;
 import com.furniture.repository.ProjectEmployeeRepository;
 import com.furniture.repository.ProjectRepository;
 import com.furniture.repository.WorkTaskRepository;
+import com.furniture.repository.UserRepository;
 
 @Service
 public class WorkTaskService {
@@ -26,15 +28,23 @@ public class WorkTaskService {
     private final ProjectRepository projectRepository;
     private final EmployeeRepository employeeRepository;
     private final ProjectEmployeeRepository projectEmployeeRepository;
+    private final UserRepository userRepository;
 
 public WorkTaskService(WorkTaskRepository workTaskRepository,
                         ProjectRepository projectRepository,
                         EmployeeRepository employeeRepository,
-                        ProjectEmployeeRepository projectEmployeeRepository) {
+                        ProjectEmployeeRepository projectEmployeeRepository,
+                        UserRepository userRepository) {
                 this.workTaskRepository = workTaskRepository;
                 this.projectRepository = projectRepository;
                 this.employeeRepository = employeeRepository;
                 this.projectEmployeeRepository = projectEmployeeRepository;
+                this.userRepository = userRepository;
+    }
+    public Employee getEmployeeByEmail(String email){
+        User user = userRepository.findByEmailIgnoreCase(email).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+
+        return employeeRepository.findByUser_Id(user.getId()).orElseThrow(()-> new ResourceNotFoundException("Employee profile not found"));
     }
 
     public WorkTask createTask(CreateTaskRequest request) {
@@ -93,17 +103,54 @@ public WorkTaskService(WorkTaskRepository workTaskRepository,
         return result;
     }
 
-    public WorkTask updateTaskStatus(Long id, TaskStatus status) {
-        WorkTask task = workTaskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task not found with id "+ id));
+    public WorkTask updateTaskStatus(
+            Long id,
+            TaskStatus status,
+            String email,
+            boolean isAdmin) {
+
+        WorkTask task;
+
+        if (isAdmin) {
+            // Admin can update any task
+            task = workTaskRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Task not found with id " + id));
+        } else {
+            // Employee can update only their own assigned task
+            Employee employee = getEmployeeByEmail(email);
+
+            task = workTaskRepository
+                    .findByIdAndAssignedEmployeeId(id, employee.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Task not found or not assigned to you"));
+
+            // Employee must still be assigned to that project
+            if (!projectEmployeeRepository.existsByProjectIdAndEmployeeId(
+                    task.getProject().getId(), employee.getId())) {
+                throw new BadRequestException(
+                        "You are no longer assigned to this project");
+            }
+        }
+
+        if (status == null) {
+            throw new BadRequestException("Task status cannot be null");
+        }
+
         task.setStatus(status);
 
         if (status == TaskStatus.COMPLETED) {
             task.setCompletedAt(LocalDateTime.now());
-        }
-        else {
+        } else {
             task.setCompletedAt(null);
         }
 
         return workTaskRepository.save(task);
     }
+    public List<WorkTask> getMyTasks(String email){
+        Employee employee = getEmployeeByEmail(email);
+
+        return workTaskRepository.findByAssignedEmployeeId(employee.getId());
+    }
+
 }

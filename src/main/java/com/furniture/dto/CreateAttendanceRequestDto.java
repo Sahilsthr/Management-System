@@ -6,7 +6,6 @@ import java.time.LocalDate;
 
 public class CreateAttendanceRequestDto{
 
-	@NotNull
 	private Long employeeId;
 
 	@NotNull

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.furniture.dto.CreateTaskRequest;
+import com.furniture.dto.WorkTaskResponse;
 import com.furniture.entity.Employee;
 import com.furniture.entity.Project;
 import com.furniture.entity.TaskPriority;
@@ -147,10 +148,29 @@ public WorkTaskService(WorkTaskRepository workTaskRepository,
 
         return workTaskRepository.save(task);
     }
-    public List<WorkTask> getMyTasks(String email){
+    private WorkTaskResponse mapToResponse(WorkTask task){
+        return new WorkTaskResponse(
+            task.getId(),
+            task.getTaskName(),
+            task.getDescription(),
+            task.getStatus(),
+            task.getPriority(),
+            task.getDueDate(),
+            task.getCompletedAt(),
+            task.getProject().getProjectName()
+        );
+
+    }
+    public List<WorkTaskResponse> getMyTasks(String email){
         Employee employee = getEmployeeByEmail(email);
 
-        return workTaskRepository.findByAssignedEmployeeId(employee.getId());
+        return workTaskRepository
+                        .findByAssignedEmployeeId(employee.getId())
+                        .stream()
+                        .map(this::mapToResponse)
+                        .toList();
+
+
     }
 
 }

@@ -16,6 +16,8 @@ import jakarta.validation.Valid;
 import com.furniture.entity.WorkTask;
 import com.furniture.service.WorkTaskService;
 import com.furniture.dto.CreateTaskRequest;
+import com.furniture.dto.WorkTaskResponse;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -58,7 +60,7 @@ public class WorkTaskController {
         return workTaskService.getProjectProgress(projectId);
     }
     @GetMapping("/api/tasks/my")
-    public List<WorkTask> getMyTasks(Authentication authentication) {
+    public List<WorkTaskResponse> getMyTasks(Authentication authentication) {
         return workTaskService.getMyTasks(authentication.getName());
     }
     

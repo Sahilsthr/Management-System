@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.furniture.dto.AttendanceRequestResponse;
 import com.furniture.dto.CreateAttendanceRequestDto;
 import com.furniture.entity.AttendanceRequest;
 import com.furniture.entity.AttendanceRequestStatus;
@@ -25,20 +26,20 @@ import com.furniture.repository.UserRepository;
 @Service
 public class AttendanceRequestService {
 
-    private final AttendanceRequestRepository attendanceRequestRepository;
-    private final EmployeeRepository employeeRepository;
-    private final ProjectRepository projectRepository;
-    private final ProjectEmployeeRepository projectEmployeeRepository;
-    private final UserRepository userRepository;
-    private final AttendanceService attendanceService;
+        private final AttendanceRequestRepository attendanceRequestRepository;
+        private final EmployeeRepository employeeRepository;
+        private final ProjectRepository projectRepository;
+        private final ProjectEmployeeRepository projectEmployeeRepository;
+        private final UserRepository userRepository;
+        private final AttendanceService attendanceService;
 
-    public AttendanceRequestService(
-            AttendanceRequestRepository attendanceRequestRepository,
-            EmployeeRepository employeeRepository,
-            ProjectRepository projectRepository,
-            ProjectEmployeeRepository projectEmployeeRepository,
-            UserRepository userRepository,
-            AttendanceService attendanceService) {
+        public AttendanceRequestService(
+                AttendanceRequestRepository attendanceRequestRepository,
+                EmployeeRepository employeeRepository,
+                ProjectRepository projectRepository,
+                ProjectEmployeeRepository projectEmployeeRepository,
+                UserRepository userRepository,
+                AttendanceService attendanceService) {
 
         this.attendanceRequestRepository = attendanceRequestRepository;
         this.employeeRepository = employeeRepository;
@@ -46,37 +47,40 @@ public class AttendanceRequestService {
         this.projectEmployeeRepository = projectEmployeeRepository;
         this.userRepository = userRepository;
         this.attendanceService = attendanceService;
-    }
+        }
 
-    private User getCurrentUser(String email) {
-        return userRepository.findByEmailIgnoreCase(email)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Logged-in user not found"));
-    }
+        private User getCurrentUser(String email) {
+                return userRepository.findByEmailIgnoreCase(email)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Logged-in user not found"));
+        }
 
-    private Employee getEmployeeForUser(User user) {
+        private Employee getEmployeeForUser(User user) {
         return employeeRepository.findByUser_Id(user.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Employee profile not found for logged-in user"));
-    }
+        }
 
-    private boolean isAdmin(User user) {
+        private boolean isAdmin(User user) {
         return user.getRole() != null
                 && "ADMIN".equals(user.getRole().name());
-    }
+        }
 
-    // CREATE ATTENDANCE REQUEST
-    public AttendanceRequest createRequest(
-            CreateAttendanceRequestDto request, String email) {
+        // CREATE ATTENDANCE REQUEST
+        public AttendanceRequestResponse createRequest(
+                CreateAttendanceRequestDto request, String email) {
 
         User currentUser = getCurrentUser(email);
 
         Long employeeId;
 
         if (isAdmin(currentUser)) {
-            employeeId = request.getEmployeeId();
+                if(request.getEmployeeId()== null){
+                        throw new BadRequestException("Employee ID is required for admin");
+                }
+                employeeId = request.getEmployeeId();
         } else {
-            employeeId = getEmployeeForUser(currentUser).getId();
+                employeeId = getEmployeeForUser(currentUser).getId();
         }
 
         Long projectId = request.getProjectId();
@@ -91,15 +95,15 @@ public class AttendanceRequestService {
 
         if (!projectEmployeeRepository
                 .existsByProjectIdAndEmployeeId(projectId, employeeId)) {
-            throw new BadRequestException(
-                    "Employee is not assigned to this project");
+                throw new BadRequestException(
+                        "Employee is not assigned to this project");
         }
 
         if (attendanceRequestRepository
                 .existsByEmployeeIdAndProjectIdAndAttendanceDate(
                         employeeId, projectId, request.getAttendanceDate())) {
-            throw new DuplicateResourceException(
-                    "Attendance request already exists for this date");
+                throw new DuplicateResourceException(
+                        "Attendance request already exists for this date");
         }
 
         AttendanceRequest ar = new AttendanceRequest();
@@ -108,47 +112,48 @@ public class AttendanceRequestService {
         ar.setAttendanceDate(request.getAttendanceDate());
         ar.setAttendanceRequestStatus(AttendanceRequestStatus.PENDING);
 
-        return attendanceRequestRepository.save(ar);
-    }
+        AttendanceRequest saved = attendanceRequestRepository.save(ar);
+        return mapToResponse(saved);
+        }
 
     // APPROVE ATTENDANCE REQUEST
-    @Transactional
-    public AttendanceRequest approveRequest(
-            Long id, String email, String remark) {
+        @Transactional
+        public AttendanceRequest approveRequest(
+                Long id, String email, String remark) {
 
-        User reviewer = getCurrentUser(email);
+                User reviewer = getCurrentUser(email);
 
-        if (!isAdmin(reviewer)) {
-            throw new BadRequestException(
-                    "Only an admin can review requests");
+                if (!isAdmin(reviewer)) {
+                throw new BadRequestException(
+                        "Only an admin can review requests");
         }
 
         return reviewRequest(
                 id, reviewer, remark, AttendanceRequestStatus.APPROVED);
-    }
+        }
 
     // REJECT ATTENDANCE REQUEST
-    @Transactional
-    public AttendanceRequest rejectRequest(
-            Long id, String email, String remark) {
+        @Transactional
+        public AttendanceRequest rejectRequest(
+                Long id, String email, String remark) {
 
         User reviewer = getCurrentUser(email);
 
         if (!isAdmin(reviewer)) {
-            throw new BadRequestException(
-                    "Only an admin can review requests");
+                throw new BadRequestException(
+                        "Only an admin can review requests");
         }
 
         return reviewRequest(
                 id, reviewer, remark, AttendanceRequestStatus.REJECTED);
-    }
+        }
 
     // COMMON REVIEW METHOD
-    private AttendanceRequest reviewRequest(
-            Long id,
-            User reviewer,
-            String remark,
-            AttendanceRequestStatus status) {
+        private AttendanceRequest reviewRequest(
+                Long id,
+                User reviewer,
+                String remark,
+                AttendanceRequestStatus status) {
 
         AttendanceRequest ar = attendanceRequestRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -156,8 +161,8 @@ public class AttendanceRequestService {
 
         if (ar.getAttendanceRequestStatus()
                 != AttendanceRequestStatus.PENDING) {
-            throw new BadRequestException(
-                    "Request is already " + ar.getAttendanceRequestStatus());
+                throw new BadRequestException(
+                        "Request is already " + ar.getAttendanceRequestStatus());
         }
 
         ar.setAttendanceRequestStatus(status);
@@ -168,49 +173,62 @@ public class AttendanceRequestService {
         AttendanceRequest saved = attendanceRequestRepository.save(ar);
 
         if (status == AttendanceRequestStatus.APPROVED) {
-            attendanceService.createFromRequest(saved);
+                attendanceService.createFromRequest(saved);
         }
 
-        return saved;
-    }
+                return saved;
+        }
 
     // GET ALL REQUESTS
-    public List<AttendanceRequest> getAllRequests() {
-        return attendanceRequestRepository.findAll();
-    }
+        public List<AttendanceRequest> getAllRequests() {
+                return attendanceRequestRepository.findAll();
+        }
 
     // GET REQUEST BY ID
-    public AttendanceRequest getRequestById(Long id) {
-        return attendanceRequestRepository.findById(id)
+        public AttendanceRequest getRequestById(Long id) {
+                return attendanceRequestRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Attendance Request not found with id " + id));
-    }
+        }
 
     // GET REQUESTS BY EMPLOYEE
-    public List<AttendanceRequest> getRequestsByEmployee(
-            Long employeeId, String email) {
+        public List<AttendanceRequest> getRequestsByEmployee(
+                Long employeeId, String email) {
 
         User currentUser = getCurrentUser(email);
 
         if (isAdmin(currentUser)) {
-            return attendanceRequestRepository.findByEmployeeId(employeeId);
+                return attendanceRequestRepository.findByEmployeeId(employeeId);
         }
 
         Employee employee = getEmployeeForUser(currentUser);
 
         if (!employee.getId().equals(employeeId)) {
-            throw new BadRequestException(
-                    "You can only view your own attendance requests");
+                throw new BadRequestException(
+                        "You can only view your own attendance requests");
         }
 
         return attendanceRequestRepository.findByEmployeeId(employee.getId());
-    }
+        }
 
     // GET REQUESTS BY STATUS
-    public List<AttendanceRequest> getRequestsByStatus(
-            AttendanceRequestStatus status) {
+        public List<AttendanceRequest> getRequestsByStatus(
+                AttendanceRequestStatus status) {
 
         return attendanceRequestRepository
                 .findByAttendanceRequestStatus(status);
-    }
+        }
+        private AttendanceRequestResponse mapToResponse(AttendanceRequest ar) {
+                return new AttendanceRequestResponse(
+                        ar.getId(),
+                        ar.getEmployee().getUser().getName(),
+                        ar.getEmployee().getEmployeeCode(),
+                        ar.getAttendanceDate(),
+                        ar.getAttendanceRequestStatus(),
+                        ar.getProject().getProjectName(),
+                        ar.getRequestedAt(),
+                        ar.getReviewedAt(),
+                        ar.getRemark()
+                );
+        }
 }

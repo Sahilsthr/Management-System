@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.furniture.dto.AttendanceRequestResponse;
 import com.furniture.dto.CreateAttendanceRequestDto;
 import com.furniture.entity.AttendanceRequest;
 import com.furniture.entity.AttendanceRequestStatus;
@@ -30,7 +31,7 @@ public class AttendanceRequestController {
     }
 
     @PostMapping
-    public AttendanceRequest createRequest(
+    public AttendanceRequestResponse createRequest(
             @Valid @RequestBody CreateAttendanceRequestDto request,
             Authentication authentication) {
 

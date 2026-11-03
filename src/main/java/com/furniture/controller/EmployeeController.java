@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.furniture.dto.CreateEmployeeRequest;
-import com.furniture.entity.Employee;
+import com.furniture.dto.EmployeeResponse;
 import com.furniture.service.EmployeeService;
 
 import jakarta.validation.Valid;
@@ -24,18 +24,22 @@ public class EmployeeController {
     }
 
     @PostMapping("/api/employees")
-    public Employee createEmployee(@Valid @RequestBody CreateEmployeeRequest employee) {
-        System.out.println("RECEIVED designation=" + employee.getDesignation());
+    public EmployeeResponse createEmployee(
+            @Valid @RequestBody CreateEmployeeRequest employee) {
+
         return employeeService.createEmployee(employee);
     }
 
     @GetMapping("/api/employees")
-    public List<Employee> getAllEmployees() {
+    public List<EmployeeResponse> getAllEmployees() {
+
         return employeeService.getAllEmployee();
     }
 
     @GetMapping("/api/employees/{id}")
-    public Employee getEmployeeById(@PathVariable Long id) {
+    public EmployeeResponse getEmployeeById(
+            @PathVariable Long id) {
+
         return employeeService.getEmployeeById(id);
     }
 }

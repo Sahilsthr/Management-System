@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.furniture.dto.AttendanceRequestResponse;
 import com.furniture.dto.CreateAttendanceRequestDto;
-import com.furniture.entity.AttendanceRequest;
+import com.furniture.dto.ReviewAttendanceRequestDto;
 import com.furniture.entity.AttendanceRequestStatus;
 import com.furniture.service.AttendanceRequestService;
 
@@ -26,10 +25,12 @@ public class AttendanceRequestController {
 
     private final AttendanceRequestService attendanceRequestService;
 
-    public AttendanceRequestController(AttendanceRequestService attendanceRequestService) {
+    public AttendanceRequestController(
+            AttendanceRequestService attendanceRequestService) {
         this.attendanceRequestService = attendanceRequestService;
     }
 
+    // CREATE ATTENDANCE REQUEST
     @PostMapping
     public AttendanceRequestResponse createRequest(
             @Valid @RequestBody CreateAttendanceRequestDto request,
@@ -39,38 +40,59 @@ public class AttendanceRequestController {
                 request, authentication.getName());
     }
 
+    // GET ALL REQUESTS (ADMIN)
     @GetMapping
-    public List<AttendanceRequest> getAllRequests() {
+    public List<AttendanceRequestResponse> getAllRequests() {
         return attendanceRequestService.getAllRequests();
     }
 
+    // GET REQUEST BY ID (ADMIN)
     @GetMapping("/{id}")
-    public AttendanceRequest getRequestById(@PathVariable Long id) {
+    public AttendanceRequestResponse getRequestById(
+            @PathVariable Long id) {
+
         return attendanceRequestService.getRequestById(id);
     }
 
+    // GET PENDING REQUESTS (ADMIN)
     @GetMapping("/pending")
-    public List<AttendanceRequest> getPendingRequests() {
-        return attendanceRequestService.getRequestsByStatus(AttendanceRequestStatus.PENDING);
+    public List<AttendanceRequestResponse> getPendingRequests() {
+
+        return attendanceRequestService.getRequestsByStatus(
+                AttendanceRequestStatus.PENDING);
     }
 
+    // GET REQUESTS BY EMPLOYEE
     @GetMapping("/employee/{employeeId}")
-    public List<AttendanceRequest> getRequestsByEmployee(@PathVariable Long employeeId, Authentication authentication) {
-        return attendanceRequestService.getRequestsByEmployee(employeeId, authentication.getName());
-    }
-
-    @PutMapping("/{id}/approve")
-    public AttendanceRequest approveRequest(
-            @PathVariable Long id,
-            @RequestParam(required = false) String remark, Authentication authentication) {
-        return attendanceRequestService.approveRequest(id, authentication.getName(), remark);
-    }
-
-    @PutMapping("/{id}/reject")
-    public AttendanceRequest rejectRequest(
-            @PathVariable Long id,
-            @RequestParam(required = false) String remark,
+    public List<AttendanceRequestResponse> getRequestsByEmployee(
+            @PathVariable Long employeeId,
             Authentication authentication) {
+
+        return attendanceRequestService.getRequestsByEmployee(
+                employeeId, authentication.getName());
+    }
+
+    // APPROVE REQUEST (ADMIN)
+    @PutMapping("/{id}/approve")
+    public AttendanceRequestResponse approveRequest(
+            @PathVariable Long id,
+            @RequestBody(required = false) ReviewAttendanceRequestDto request,
+            Authentication authentication) {
+
+        String remark = request != null ? request.getRemark() : null;
+
+        return attendanceRequestService.approveRequest(
+                id, authentication.getName(), remark);
+    }
+
+    // REJECT REQUEST (ADMIN)
+    @PutMapping("/{id}/reject")
+    public AttendanceRequestResponse rejectRequest(
+            @PathVariable Long id,
+            @RequestBody(required = false) ReviewAttendanceRequestDto request,
+            Authentication authentication) {
+
+        String remark = request != null ? request.getRemark() : null;
 
         return attendanceRequestService.rejectRequest(
                 id, authentication.getName(), remark);

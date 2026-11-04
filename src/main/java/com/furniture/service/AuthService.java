@@ -1,17 +1,18 @@
+
 package com.furniture.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.furniture.repository.UserRepository;
 import com.furniture.config.JwtService;
 import com.furniture.dto.LoginRequest;
 import com.furniture.dto.LoginResponse;
 import com.furniture.dto.UserResponse;
 import com.furniture.entity.User;
-import com.furniture.exception.UnauthorizedException;
 import com.furniture.exception.ResourceNotFoundException;
+import com.furniture.exception.UnauthorizedException;
+import com.furniture.repository.UserRepository;
 
 @Service
 public class AuthService {
@@ -38,15 +39,10 @@ public class AuthService {
                 .orElseThrow(() -> new UnauthorizedException(
                         "Invalid email or password"));
 
-        // TEMPORARY DEBUGGING
-        System.out.println("User found: " + user.getEmail());
-
         boolean passwordMatches = passwordEncoder.matches(
                 request.getPassword(),
                 user.getPassword()
         );
-
-        System.out.println("Password matches: " + passwordMatches);
 
         if (!passwordMatches) {
             throw new UnauthorizedException(
@@ -72,5 +68,5 @@ public class AuthService {
                 user.getPhone(),
                 user.getRole()
         );
-    }
+        }
 }

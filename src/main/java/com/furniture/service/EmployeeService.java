@@ -1,3 +1,4 @@
+
 package com.furniture.service;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.furniture.dto.CreateEmployeeRequest;
 import com.furniture.dto.EmployeeResponse;
 import com.furniture.entity.Employee;
+import com.furniture.entity.Role;
 import com.furniture.entity.User;
 import com.furniture.exception.DuplicateResourceException;
 import com.furniture.exception.ResourceNotFoundException;
@@ -35,20 +37,27 @@ public class EmployeeService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "User not found with id " + request.getUserId()));
 
-        if (employeeRepository.existsByUserId(request.getUserId())) {
+        if (user.getRole() != Role.EMPLOYEE) {
+            throw new IllegalArgumentException(
+                    "Employee profile can only be assigned to EMPLOYEE users");
+        }
+
+        if (employeeRepository.existsByUserId(user.getId())) {
             throw new DuplicateResourceException(
                     "Employee already exists for this user");
         }
 
-        if (employeeRepository.existsByEmployeeCode(request.getEmployeeCode())) {
+        String employeeCode = request.getEmployeeCode().trim();
+
+        if (employeeRepository.existsByEmployeeCode(employeeCode)) {
             throw new DuplicateResourceException(
                     "Employee code already exists");
         }
 
         Employee employee = new Employee();
 
-        employee.setEmployeeCode(request.getEmployeeCode());
-        employee.setDesignation(request.getDesignation());
+        employee.setEmployeeCode(employeeCode);
+        employee.setDesignation(request.getDesignation().trim());
         employee.setJoiningDate(request.getJoiningDate());
         employee.setUser(user);
 
@@ -76,7 +85,6 @@ public class EmployeeService {
         return mapToResponse(employee);
     }
 
-    // GET LOGGED-IN USER'S EMPLOYEE PROFILE
     @Transactional(readOnly = true)
     public EmployeeResponse getMyProfile(String email) {
 

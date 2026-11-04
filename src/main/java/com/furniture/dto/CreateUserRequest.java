@@ -1,3 +1,4 @@
+
 package com.furniture.dto;
 
 import com.furniture.entity.Role;
@@ -9,21 +10,21 @@ import jakarta.validation.constraints.Size;
 
 public class CreateUserRequest {
 
-	@NotBlank
-	private String name;
+    @NotBlank(message = "Name is required")
+    private String name;
 
-	@NotBlank
-	@Email
-	private String email;
+    @NotBlank(message = "Email is required")
+    @Email(message = "Enter a valid email address")
+    private String email;
 
-	private String phone;
+    private String phone;
 
-	@NotBlank
-	@Size(min = 6)
-	private String password;
+    @NotBlank(message = "Password is required")
+    @Size(min = 12, message = "Password must contain at least 12 characters")
+    private String password;
 
-	@NotNull
-	private Role role;
+    @NotNull(message = "Role is required")
+    private Role role;
 
     public CreateUserRequest() {
     }
@@ -67,5 +68,4 @@ public class CreateUserRequest {
     public void setRole(Role role) {
         this.role = role;
     }
-
 }

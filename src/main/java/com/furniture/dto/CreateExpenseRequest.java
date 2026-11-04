@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import com.furniture.entity.ExpenseCategory;
 
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
@@ -14,6 +15,9 @@ public class CreateExpenseRequest {
 
     @NotNull(message = "Project id is required")
     private Long projectId;
+    
+    @Digits(integer = 10, fraction = 2,
+        message = "Amount can have maximum 10 digits and 2 decimal places")
 
     @NotNull(message = "Amount is required")
     @Positive(message = "Amount must be greater than 0")

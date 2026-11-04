@@ -1,3 +1,4 @@
+
 package com.furniture.entity;
 
 import java.time.LocalDateTime;
@@ -15,17 +16,18 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "client_access")
 public class ClientAccess {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "project_id", nullable=false)
+    @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
-    @Column(nullable = false ,unique=true,length=100)
-    private String token;
-        
+    @Column(name = "token", nullable = false, unique = true, length = 64)
+    private String tokenHash;
+
     @Column(nullable = false)
     private LocalDateTime expiresAt;
 
@@ -35,15 +37,15 @@ public class ClientAccess {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    
     @PrePersist
-    public void onCreate(){
+    public void onCreate() {
         this.createdAt = LocalDateTime.now();
-        if(this.active == null){
+
+        if (this.active == null) {
             this.active = true;
         }
     }
-    
+
     public ClientAccess() {
     }
 
@@ -63,12 +65,12 @@ public class ClientAccess {
         this.project = project;
     }
 
-    public String getToken() {
-        return token;
+    public String getTokenHash() {
+        return tokenHash;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setTokenHash(String tokenHash) {
+        this.tokenHash = tokenHash;
     }
 
     public LocalDateTime getExpiresAt() {
@@ -94,5 +96,4 @@ public class ClientAccess {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-    
 }

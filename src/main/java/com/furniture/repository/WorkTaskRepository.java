@@ -14,5 +14,8 @@ public interface WorkTaskRepository extends JpaRepository<WorkTask, Long>{
     long countByProjectIdAndStatus(Long projectId, TaskStatus status);
     List<WorkTask> findByAssignedEmployeeId(Long employeeId);
     Optional<WorkTask> findByIdAndAssignedEmployeeId(Long id, Long employeeId);
-    
+    List<WorkTask> findByAssignedEmployeeIdAndProjectIdIn(
+    Long employeeId,
+    List<Long> projectIds
+);
 }

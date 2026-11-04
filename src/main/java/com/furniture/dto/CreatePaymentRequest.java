@@ -1,28 +1,35 @@
+
 package com.furniture.dto;
 
 import java.math.BigDecimal;
-
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+
 import com.furniture.entity.PaymentMethod;
 import com.furniture.entity.PaymentStatus;
 
-
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public class CreatePaymentRequest {
+
     @NotNull(message = "Project id is required!")
     private Long projectId;
-    
+
     @NotNull(message = "Amount is required")
-    @Positive (message= " Amount must be greater than zero")
+    @Positive(message = "Amount must be greater than zero")
+    @Digits(
+        integer = 10,
+        fraction = 2,
+        message = "Amount can have maximum 10 digits and 2 decimal places"
+    )
     private BigDecimal amount;
 
-    @NotNull(message="payment date is required")
+    @NotNull(message = "Payment date is required")
     private LocalDate paymentDate;
 
-    @NotNull(message = "Payment method is Required")
+    @NotNull(message = "Payment method is required")
     private PaymentMethod paymentMethod;
 
     private PaymentStatus paymentStatus;
@@ -37,8 +44,8 @@ public class CreatePaymentRequest {
         return projectId;
     }
 
-    public void setProjectId(Long id) {
-        this.projectId = id;
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 
     public BigDecimal getAmount() {
@@ -80,8 +87,4 @@ public class CreatePaymentRequest {
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
-
-    
-
-    
 }

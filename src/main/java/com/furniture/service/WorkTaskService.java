@@ -20,8 +20,8 @@ import com.furniture.exception.ResourceNotFoundException;
 import com.furniture.repository.EmployeeRepository;
 import com.furniture.repository.ProjectEmployeeRepository;
 import com.furniture.repository.ProjectRepository;
-import com.furniture.repository.WorkTaskRepository;
 import com.furniture.repository.UserRepository;
+import com.furniture.repository.WorkTaskRepository;
 
 @Service
 public class WorkTaskService {
@@ -161,16 +161,26 @@ public WorkTaskService(WorkTaskRepository workTaskRepository,
         );
 
     }
-    public List<WorkTaskResponse> getMyTasks(String email){
+    public List<WorkTaskResponse> getMyTasks(String email) {
+
         Employee employee = getEmployeeByEmail(email);
 
+        List<Long> projectIds = projectEmployeeRepository
+                .findByEmployeeId(employee.getId())
+                .stream()
+                .map(assignment -> assignment.getProject().getId())
+                .toList();
+
+        if (projectIds.isEmpty()) {
+            return List.of();
+        }
+
         return workTaskRepository
-                        .findByAssignedEmployeeId(employee.getId())
-                        .stream()
-                        .map(this::mapToResponse)
-                        .toList();
-
-
+                .findByAssignedEmployeeIdAndProjectIdIn(
+                        employee.getId(), projectIds)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 
 }

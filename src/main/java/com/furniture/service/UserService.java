@@ -1,4 +1,3 @@
-
 package com.furniture.service;
 
 import java.util.List;
@@ -11,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.furniture.dto.CreateUserRequest;
 import com.furniture.entity.Role;
 import com.furniture.entity.User;
+import com.furniture.exception.BadRequestException;
 import com.furniture.exception.DuplicateResourceException;
 import com.furniture.repository.UserRepository;
 
@@ -23,14 +23,12 @@ public class UserService {
     public UserService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder) {
-
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
     public User createUser(CreateUserRequest request) {
-
         String email = request.getEmail().trim().toLowerCase();
 
         if (userRepository.existsByEmailIgnoreCase(email)) {
@@ -38,13 +36,11 @@ public class UserService {
         }
 
         if (request.getRole() != Role.EMPLOYEE) {
-            throw new IllegalArgumentException(
-                    "Only EMPLOYEE accounts can be created through this API"
-            );
+            throw new BadRequestException(
+                    "Only EMPLOYEE accounts can be created through this API");
         }
 
         User user = new User();
-
         user.setName(request.getName().trim());
         user.setEmail(email);
         user.setPhone(request.getPhone() == null

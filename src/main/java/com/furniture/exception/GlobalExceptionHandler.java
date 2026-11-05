@@ -22,157 +22,95 @@ public class GlobalExceptionHandler {
     private static final Logger log =
             LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    // RESOURCE NOT FOUND - 404
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
             ResourceNotFoundException ex) {
-
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return error(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    // DUPLICATE RESOURCE - 409
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateResourceException(
             DuplicateResourceException ex) {
-
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.CONFLICT.value(),
-                ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        return error(HttpStatus.CONFLICT, ex.getMessage());
     }
 
-    // BAD REQUEST - 400
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(
             BadRequestException ex) {
-
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        return error(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    // VALIDATION ERROR - 400
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(
             MethodArgumentNotValidException ex) {
-
         String message = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(e -> e.getField() + ": " + e.getDefaultMessage())
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(
-                        HttpStatus.BAD_REQUEST.value(), message));
+        return error(HttpStatus.BAD_REQUEST, message);
     }
 
-    // INVALID PARAMETER - 400
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleTypeMismatch(
             MethodArgumentTypeMismatchException ex) {
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(
-                        HttpStatus.BAD_REQUEST.value(),
-                        "Invalid value for parameter"));
+        return error(HttpStatus.BAD_REQUEST, "Invalid value for parameter");
     }
 
-    // DATABASE CONSTRAINT ERROR - 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrity(
             DataIntegrityViolationException ex) {
-
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ErrorResponse(
-                        HttpStatus.CONFLICT.value(),
-                        "Duplicate or invalid data"));
+        log.warn("Database constraint violation", ex);
+        return error(HttpStatus.CONFLICT, "Duplicate or invalid data");
     }
 
-    // INVALID REQUEST BODY - 400
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleUnreadable(
             HttpMessageNotReadableException ex) {
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(
-                        HttpStatus.BAD_REQUEST.value(),
-                        "Invalid request body. Check JSON, enum values and date format"));
+        return error(HttpStatus.BAD_REQUEST,
+                "Invalid request body. Check JSON, enum values and date format");
     }
 
-    // RESOURCE NOT FOUND - 404
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> handleNoResource(
             NoResourceFoundException ex) {
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(
-                        HttpStatus.NOT_FOUND.value(),
-                        "Resource not found"));
+        return error(HttpStatus.NOT_FOUND, "Resource not found");
     }
 
-    // METHOD NOT ALLOWED - 405
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleMethodNotSupported(
             HttpRequestMethodNotSupportedException ex) {
-
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
-                .body(new ErrorResponse(
-                        HttpStatus.METHOD_NOT_ALLOWED.value(),
-                        "Method not allowed"));
+        return error(HttpStatus.METHOD_NOT_ALLOWED, "Method not allowed");
     }
 
-    // ACCESS DENIED - 403
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDenied(
             AccessDeniedException ex) {
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(new ErrorResponse(
-                        HttpStatus.FORBIDDEN.value(),
-                        ex.getMessage()));
+        return error(HttpStatus.FORBIDDEN,
+                "You do not have permission to access this resource");
     }
 
-    // UNAUTHORIZED - 401
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorResponse> handleUnauthorized(
             UnauthorizedException ex) {
-
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.UNAUTHORIZED.value(),
-                ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+        return error(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
-    // CUSTOM FORBIDDEN EXCEPTION - 403
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ErrorResponse> handleForbidden(
             ForbiddenException ex) {
-
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.FORBIDDEN.value(),
-                ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+        return error(HttpStatus.FORBIDDEN,
+                "You do not have permission to access this resource");
     }
 
-    // GENERAL ERROR - 500
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
-
         log.error("Unexpected error", ex);
+        return error(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+    }
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(
-                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                        "Something went wrong"));
+    private ResponseEntity<ErrorResponse> error(HttpStatus status, String message) {
+        ErrorResponse body = new ErrorResponse(status.value(), message);
+        return ResponseEntity.status(status).body(body);
     }
 }

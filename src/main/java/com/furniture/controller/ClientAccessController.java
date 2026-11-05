@@ -1,9 +1,9 @@
-
 package com.furniture.controller;
 
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,30 +36,34 @@ public class ClientAccessController {
     public ClientAccessCreateResponse createAccess(
             @PathVariable Long projectId,
             @RequestParam(defaultValue = "30") int validDays) {
-
         return clientAccessService.createAccess(projectId, validDays);
     }
 
     @GetMapping("/api/projects/{projectId}/client-access")
     public List<ClientAccessResponse> getAccessByProject(
             @PathVariable Long projectId) {
-
         return clientAccessService.getAccessByProject(projectId);
     }
 
     @PutMapping("/api/client-access/{id}/revoke")
-    public ClientAccessResponse revokeToken(
-            @PathVariable Long id) {
-
+    public ClientAccessResponse revokeToken(@PathVariable Long id) {
         return clientAccessService.revokeToken(id);
     }
 
     @GetMapping("/api/client-view/{token}")
     public ResponseEntity<Map<String, Object>> getClientView(
             @PathVariable String token) {
+        var view = clientViewService.getClientView(token);
+        if (view.isEmpty()) {
+            return ResponseEntity.status(404)
+                    .cacheControl(CacheControl.noStore())
+                    .header("Referrer-Policy", "no-referrer")
+                    .build();
+        }
 
-        return clientViewService.getClientView(token)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.noStore())
+                .header("Referrer-Policy", "no-referrer")
+                .body(view.get());
     }
 }

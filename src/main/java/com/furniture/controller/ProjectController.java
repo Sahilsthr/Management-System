@@ -10,40 +10,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.furniture.dto.CreateProjectRequest;
+import com.furniture.dto.ProjectSummaryResponse;
 import com.furniture.entity.Project;
 import com.furniture.service.ProjectService;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestParam;
 
-
-
-
-@RestController 
+@RestController
 public class ProjectController {
 
     private final ProjectService projectService;
 
-    public ProjectController(ProjectService projectService){
+    public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
-
     }
+
     @PostMapping("/api/projects")
-    public Project createProject(@Valid @RequestBody CreateProjectRequest request){
+    public Project createProject(@Valid @RequestBody CreateProjectRequest request) {
         return projectService.createProject(request);
     }
-    
+
     @GetMapping("/api/projects")
-    public List<Project> getAllProject(){
+    public List<Project> getAllProject() {
         return projectService.getAllProject();
     }
+
     @GetMapping("/api/projects/{id}")
-    public Project getProjectById(@PathVariable Long id){
+    public Project getProjectById(@PathVariable Long id) {
         return projectService.getProjectById(id);
     }
+
     @GetMapping("/api/projects/my")
-    public List<Project> getMyProjects(Authentication authentication) {
+    public List<ProjectSummaryResponse> getMyProjects(Authentication authentication) {
         return projectService.getMyProjects(authentication.getName());
     }
-    
 }

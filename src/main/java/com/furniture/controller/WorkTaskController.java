@@ -11,29 +11,26 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.furniture.entity.TaskStatus;
-import jakarta.validation.Valid;
-import com.furniture.entity.WorkTask;
-import com.furniture.service.WorkTaskService;
 import com.furniture.dto.CreateTaskRequest;
 import com.furniture.dto.WorkTaskResponse;
+import com.furniture.entity.TaskStatus;
+import com.furniture.entity.WorkTask;
+import com.furniture.service.WorkTaskService;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
-
+import jakarta.validation.Valid;
 
 @RestController
 public class WorkTaskController {
 
     private final WorkTaskService workTaskService;
 
-    public WorkTaskController(WorkTaskService workTaskService){
+    public WorkTaskController(WorkTaskService workTaskService) {
         this.workTaskService = workTaskService;
     }
-    
+
     @PostMapping("/api/tasks")
-    public WorkTask createTask(@Valid @RequestBody CreateTaskRequest workTask){
-        return workTaskService.createTask(workTask);
+    public WorkTask createTask(@Valid @RequestBody CreateTaskRequest request) {
+        return workTaskService.createTask(request);
     }
 
     @GetMapping("/api/tasks")
@@ -45,27 +42,27 @@ public class WorkTaskController {
     public WorkTask getTaskById(@PathVariable Long id) {
         return workTaskService.getTaskById(id);
     }
-    @PutMapping("/api/tasks/{id}/status")
-    public WorkTask updateTaskStatus(@PathVariable Long id,
-                                @RequestBody TaskStatus status,
-                                Authentication authentication){
 
-        boolean isAdmin = authentication.getAuthorities().stream().anyMatch(a-> a.getAuthority().equals("ROLE_ADMIN"));
-        
-        return workTaskService.updateTaskStatus(id, status, authentication.getName(), isAdmin);
+    @PutMapping("/api/tasks/{id}/status")
+    public WorkTaskResponse updateTaskStatus(
+            @PathVariable Long id,
+            @RequestBody TaskStatus status,
+            Authentication authentication) {
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+
+        return workTaskService.updateTaskStatus(
+                id, status, authentication.getName(), isAdmin);
     }
 
     @GetMapping("/api/projects/{projectId}/progress")
     public Map<String, Object> getProjectProgress(@PathVariable Long projectId) {
         return workTaskService.getProjectProgress(projectId);
     }
+
     @GetMapping("/api/tasks/my")
     public List<WorkTaskResponse> getMyTasks(Authentication authentication) {
         return workTaskService.getMyTasks(authentication.getName());
     }
-    
-        
-        
-
-    
 }

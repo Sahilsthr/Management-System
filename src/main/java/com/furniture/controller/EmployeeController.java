@@ -2,6 +2,7 @@ package com.furniture.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,14 +33,16 @@ public class EmployeeController {
 
     @GetMapping("/api/employees")
     public List<EmployeeResponse> getAllEmployees() {
-
         return employeeService.getAllEmployee();
     }
 
-    @GetMapping("/api/employees/{id}")
-    public EmployeeResponse getEmployeeById(
-            @PathVariable Long id) {
+    @GetMapping("/api/employees/me")
+    public EmployeeResponse getMyProfile(Authentication authentication) {
+        return employeeService.getMyProfile(authentication.getName());
+    }
 
+    @GetMapping("/api/employees/{id}")
+    public EmployeeResponse getEmployeeById(@PathVariable Long id) {
         return employeeService.getEmployeeById(id);
     }
 }

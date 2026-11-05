@@ -1,0 +1,503 @@
+/* ========================================
+   SITES PAGE
+   Shared design from dashboard.css
+======================================== */
+
+
+/* Page Heading */
+
+.sites-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin: 32px 0 25px;
+}
+
+.sites-heading h1 {
+    font-size: 25px;
+    font-weight: 800;
+    color: #292721;
+}
+
+.sites-heading p {
+    color: #99938a;
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+
+/* Primary Button */
+
+.site-primary-button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #d97745;
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    white-space: nowrap;
+}
+
+.site-primary-button:hover {
+    background: #c96b3d;
+    transform: translateY(-1px);
+}
+
+
+/* Statistics */
+
+.sites-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+
+/* Sites Panel */
+
+.sites-panel {
+    background: #fff;
+    border: 1px solid #eee9e2;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.sites-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.sites-toolbar h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #292721;
+}
+
+.sites-toolbar p {
+    color: #99938a;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.sites-toolbar input {
+    width: 300px;
+    max-width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e8e2da;
+    border-radius: 8px;
+    background: #fff;
+    color: #292721;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 400;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sites-toolbar input:focus {
+    border-color: #d97745;
+    box-shadow: 0 0 0 3px rgba(217, 119, 69, 0.10);
+}
+
+.sites-toolbar input::placeholder {
+    color: #aaa49b;
+}
+
+
+/* Table */
+
+.sites-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.sites-table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.sites-table thead {
+    background: #faf8f5;
+}
+
+.sites-table th {
+    padding: 15px 13px;
+    color: #8c877f;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.45px;
+    white-space: nowrap;
+}
+
+.sites-table td {
+    padding: 17px 13px;
+    border-bottom: 1px solid #eee9e2;
+    color: #77736d;
+    font-size: 12px;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+.sites-table tbody tr:hover {
+    background: #fdfaf7;
+}
+
+.sites-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.sites-table .table-placeholder {
+    padding: 30px 15px;
+    text-align: center;
+    color: #99938a;
+    font-size: 13px;
+}
+
+
+/* GPS Status */
+
+.location-status {
+    display: inline-block;
+    padding: 6px 11px;
+    border-radius: 20px;
+    background: #eaf5ed;
+    color: #39865b;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.location-missing {
+    background: #fff1df;
+    color: #bd7b27;
+}
+
+
+/* Messages */
+
+.sites-message {
+    margin-top: 20px;
+    color: #99938a;
+    font-size: 12px;
+}
+
+.sites-message.success {
+    color: #258354;
+}
+
+.sites-message.error {
+    color: #d04444;
+}
+
+
+/* ========================================
+   ADD SITE MODAL
+======================================== */
+
+.site-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    padding: 20px;
+    background: rgba(41, 39, 33, 0.42);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(3px);
+}
+
+.site-modal.show {
+    display: flex;
+}
+
+.site-modal-content {
+    width: 100%;
+    max-width: 650px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #eee9e2;
+    border-radius: 14px;
+    box-shadow: 0 18px 55px rgba(41, 39, 33, 0.16);
+    animation: siteModalOpen 0.2s ease;
+}
+
+@keyframes siteModalOpen {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.site-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.site-modal-header h2 {
+    color: #292721;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.site-modal-header p {
+    margin-top: 6px;
+    color: #99938a;
+    font-size: 12px;
+}
+
+.site-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border: 1px solid #f0e6de;
+    border-radius: 8px;
+    background: #fff3ed;
+    color: #c96b3d;
+    font-family: inherit;
+    font-size: 23px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.site-modal-close:hover {
+    background: #f9e2d7;
+}
+
+
+/* Form */
+
+.site-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.site-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    margin-bottom: 18px;
+}
+
+.site-form-group label {
+    color: #514d46;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.site-form-group input,
+.site-form-group textarea,
+.site-form-group select {
+    width: 100%;
+    min-height: 44px;
+    padding: 11px 13px;
+    border: 1px solid #e8e2da;
+    border-radius: 8px;
+    outline: none;
+    background: #fff;
+    color: #292721;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.site-form-group textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.site-form-group input::placeholder,
+.site-form-group textarea::placeholder {
+    color: #aaa49b;
+}
+
+.site-form-group input:focus,
+.site-form-group textarea:focus,
+.site-form-group select:focus {
+    border-color: #d97745;
+    box-shadow: 0 0 0 3px rgba(217, 119, 69, 0.10);
+}
+
+
+/* GPS Section */
+
+.site-section-label {
+    padding-bottom: 10px;
+    margin: 8px 0 18px;
+    border-bottom: 1px solid #eee9e2;
+    color: #c96b3d;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.site-section-label span {
+    margin-left: 5px;
+    color: #aaa49b;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+
+/* Form Message */
+
+#siteFormMessage.form-message {
+    margin: 0 0 14px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+#siteFormMessage.form-message.error {
+    color: #d04444;
+}
+
+#siteFormMessage.form-message.success {
+    color: #258354;
+}
+
+
+/* Modal Buttons */
+
+.site-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding-top: 18px;
+    margin-top: 8px;
+    border-top: 1px solid #eee9e2;
+}
+
+.site-cancel-button,
+.save-site-button {
+    min-height: 40px;
+    padding: 10px 17px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.site-cancel-button {
+    border: 1px solid #e8e2da;
+    background: #fff;
+    color: #77736d;
+}
+
+.site-cancel-button:hover {
+    background: #f7f5f1;
+}
+
+.save-site-button {
+    border: 1px solid #d97745;
+    background: #d97745;
+    color: #fff;
+}
+
+.save-site-button:hover {
+    border-color: #c96b3d;
+    background: #c96b3d;
+}
+
+.save-site-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 1100px) {
+
+    .sites-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .sites-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .site-primary-button {
+        width: 100%;
+    }
+
+    .sites-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sites-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .sites-toolbar input {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 520px) {
+
+    .sites-panel {
+        padding: 16px;
+    }
+
+    .site-modal {
+        padding: 12px;
+    }
+
+    .site-modal-content {
+        padding: 20px 17px;
+        max-height: 94vh;
+        border-radius: 12px;
+    }
+
+    .site-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .site-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .site-cancel-button,
+    .save-site-button {
+        width: 100%;
+    }
+
+}

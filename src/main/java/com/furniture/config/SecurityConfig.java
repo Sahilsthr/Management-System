@@ -41,7 +41,7 @@ public class SecurityConfig {
 
                         // Actuator endpoints must not be available to ordinary employees.
                         .requestMatchers("/actuator/**").hasRole("ADMIN")
-
+                        
                         .requestMatchers("/api/auth/me").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/employees/me")
                         .hasAnyRole("ADMIN", "EMPLOYEE")
@@ -58,6 +58,23 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/projects/my")
                         .hasAnyRole("ADMIN", "EMPLOYEE")
                         .requestMatchers("/api/**").hasRole("ADMIN")
+                        //frontend
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/",
+                                "/login.html",
+                                "/admin-dashboard.html",
+                                "/clients.html",
+                                "/projects.html",
+                                "/sites.html",
+                                "/employees.html",
+                                "/tasks.html",
+                                "/css/**",
+                                "/js/**",
+                                "/images/**",
+                                "/favicon.ico"
+                                ).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, ex) ->

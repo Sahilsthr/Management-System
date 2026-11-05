@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Furniture Management</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="js/dashboard.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-logo">F</div>
+                <span>Furniture Management</span>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <p class="nav-heading">MAIN MENU</p>
+
+                <a href="admin-dashboard.html" class="nav-link active">
+                    Dashboard
+                </a>
+
+                <a href="clients.html" class="nav-link">Clients</a>
+                <a href="projects.html" class="nav-link">Projects</a>
+                <a href="sites.html" class="nav-link">Sites</a>
+
+                <p class="nav-heading">MANAGEMENT</p>
+
+                <a href="employees.html" class="nav-link">Employees</a>
+                <a href="tasks.html" class="nav-link">Tasks</a>
+                <a href="#" class="nav-link">Attendance</a>
+
+                <p class="nav-heading">FINANCE</p>
+
+                <a href="#" class="nav-link">Payments</a>
+                <a href="#" class="nav-link">Expenses</a>
+                <a href="#" class="nav-link">Reports</a>
+
+            </nav>
+
+            <button id="logoutButton" class="logout-button">
+                Logout
+            </button>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div>
+                    <h2>Dashboard</h2>
+                    <p>Welcome back to your workspace.</p>
+                </div>
+
+                <div class="profile-info">
+                    <div class="profile-avatar">A</div>
+
+                    <div>
+                        <strong id="adminName">Administrator</strong>
+                        <small>Admin</small>
+                    </div>
+                </div>
+
+            </header>
+
+
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+
+                <div>
+                    <h1>Welcome back, <span id="welcomeName">Admin</span>!</h1>
+
+                    <p>
+                        Here's what's happening with your business today.
+                    </p>
+                </div>
+
+            </section>
+
+
+            <!-- Summary Cards -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <p>Total Projects</p>
+                    <h2 id="totalProjects">--</h2>
+                    <span>All business projects</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Active Projects</p>
+                    <h2 id="activeProjects">--</h2>
+                    <span>Currently in progress</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Total Clients</p>
+                    <h2 id="totalClients">--</h2>
+                    <span>Registered clients</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Total Employees</p>
+                    <h2 id="totalEmployees">--</h2>
+                    <span>Registered employees</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Pending Attendance</p>
+                    <h2 id="pendingAttendanceRequests">--</h2>
+                    <span>Requests awaiting approval</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Total Revenue</p>
+                    <h2 id="totalRevenue">--</h2>
+                    <span>Paid payments</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Total Expenses</p>
+                    <h2 id="totalExpenses">--</h2>
+                    <span>Business expenses</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Total Profit</p>
+                    <h2 id="totalProfit">--</h2>
+                    <span>Revenue minus expenses</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Pending Payments</p>
+                    <h2 id="pendingPayments">--</h2>
+                    <span>Outstanding project amount</span>
+                </div>
+
+            </section>
+
+            <!-- Dashboard Content -->
+            <section class="dashboard-panel">
+
+                <h2>Business Overview</h2>
+
+                <p>
+                    Your project, employee and financial summaries
+                    will appear here.
+                </p>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

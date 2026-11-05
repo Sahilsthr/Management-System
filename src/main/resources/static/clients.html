@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Clients | Furniture Management</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/clients.css">
+
+    <script src="js/clients.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-logo">F</div>
+                <span>Furniture Management</span>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <p class="nav-heading">MAIN MENU</p>
+
+                <a href="admin-dashboard.html" class="nav-link">
+                    Dashboard
+                </a>
+
+                <a href="clients.html" class="nav-link active">
+                    Clients
+                </a>
+
+                <a href="projects.html" class="nav-link">Projects</a>
+                <a href="sites.html" class="nav-link">Sites</a>
+
+                <p class="nav-heading">MANAGEMENT</p>
+
+                <a href="employees.html" class="nav-link">Employees</a>
+                <a href="tasks.html" class="nav-link">Tasks</a>
+                <a href="#" class="nav-link">Attendance</a>
+
+                <p class="nav-heading">FINANCE</p>
+
+                <a href="#" class="nav-link">Payments</a>
+                <a href="#" class="nav-link">Expenses</a>
+                <a href="#" class="nav-link">Reports</a>
+
+            </nav>
+
+            <button id="logoutButton" class="logout-button">
+                Logout
+            </button>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div>
+                    <h2>Clients</h2>
+                    <p>Manage your business clients.</p>
+                </div>
+
+                <div class="profile-info">
+                    <div class="profile-avatar">A</div>
+
+                    <div>
+                        <strong id="adminName">Administrator</strong>
+                        <small>Admin</small>
+                    </div>
+                </div>
+
+            </header>
+
+
+            <!-- Page Heading -->
+            <section class="clients-heading">
+
+                <div>
+                    <h1>Client Management</h1>
+                    <p>View and manage all your registered clients.</p>
+                </div>
+
+                <button id="addClientButton" class="add-client-button">
+                    + Add New Client
+                </button>
+
+            </section>
+
+
+            <!-- Client Statistics -->
+            <section class="client-summary">
+
+                <div class="stat-card">
+                    <p>Total Clients</p>
+                    <h2 id="totalClients">--</h2>
+                    <span>Registered clients</span>
+                </div>
+
+            </section>
+
+
+            <!-- Client List -->
+            <section class="client-panel">
+
+                <div class="client-toolbar">
+
+                    <div>
+                        <h2>All Clients</h2>
+                        <p>Manage your client information.</p>
+                    </div>
+
+                    <input
+                        type="search"
+                        id="searchClients"
+                        placeholder="Search clients...">
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table class="clients-table">
+
+                        <thead>
+                            <tr>
+                                <th>Client ID</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="clientsTableBody">
+
+                            <tr>
+                                <td colspan="5">
+                                    Loading clients...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <p id="clientsMessage" role="status"></p>
+
+            </section>
+            <!-- Add Client Modal -->
+            <dialog id="clientDialog" class="client-dialog">
+
+                <div class="modal-header">
+                    <h2>Add New Client</h2>
+                    <button type="button" id="closeClientModal">×</button>
+                </div>
+
+                <p class="modal-subtitle">
+                    Enter the details of your new client.
+                </p>
+
+                <form id="addClientForm">
+
+                    <div class="modal-form-group">
+                        <label for="clientName">Client Name</label>
+                        <input
+                            type="text"
+                            id="clientName"
+                            placeholder="Enter client name"
+                            required>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label for="clientPhone">Phone Number</label>
+                        <input
+                            type="tel"
+                            id="clientPhone"
+                            placeholder="10-digit phone number"
+                            pattern="[0-9]{10}"
+                            maxlength="10"
+                            required>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label for="clientEmail">Email Address</label>
+                        <input
+                            type="email"
+                            id="clientEmail"
+                            placeholder="Enter email address"
+                            required>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label for="clientAddress">Address</label>
+                        <textarea
+                            id="clientAddress"
+                            placeholder="Enter complete address"
+                            rows="3"
+                            required></textarea>
+                    </div>
+
+                    <p id="formMessage" role="alert"></p>
+
+                    <div class="modal-actions">
+                        <button type="button" id="cancelClient">
+                            Cancel
+                        </button>
+
+                        <button type="submit" class="save-client-button">
+                            Save Client
+                        </button>
+                    </div>
+
+                </form>
+
+            </dialog>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

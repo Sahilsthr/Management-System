@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Projects | Furniture Management</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/projects.css">
+
+    <script src="js/projects.js" defer></script>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-logo">F</div>
+                <span>Furniture Management</span>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <p class="nav-heading">MAIN MENU</p>
+
+                <a href="admin-dashboard.html" class="nav-link">Dashboard</a>
+                <a href="clients.html" class="nav-link">Clients</a>
+                <a href="projects.html" class="nav-link active">Projects</a>
+                <a href="sites.html" class="nav-link">Sites</a>
+
+                <p class="nav-heading">MANAGEMENT</p>
+
+                <a href="employees.html" class="nav-link">Employees</a>
+                <a href="tasks.html" class="nav-link">Tasks</a>
+                <a href="#" class="nav-link">Attendance</a>
+
+                <p class="nav-heading">FINANCE</p>
+
+                <a href="#" class="nav-link">Payments</a>
+                <a href="#" class="nav-link">Expenses</a>
+                <a href="#" class="nav-link">Reports</a>
+
+            </nav>
+
+            <button id="logoutButton" class="logout-button">
+                Logout
+            </button>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div>
+                    <h2>Projects</h2>
+                    <p>Manage your business projects.</p>
+                </div>
+
+                <div class="profile-info">
+                    <div class="profile-avatar">A</div>
+
+                    <div>
+                        <strong id="adminName">Administrator</strong>
+                        <small>Admin</small>
+                    </div>
+                </div>
+
+            </header>
+
+
+            <!-- Page Heading -->
+            <section class="projects-heading">
+
+                <div>
+                    <h1>Project Management</h1>
+                    <p>Manage projects, clients and project budgets.</p>
+                </div>
+
+                <button id="addProjectButton" class="add-project-button">
+                    + Add New Project
+                </button>
+
+            </section>
+
+
+            <!-- Project Statistics -->
+            <section class="project-summary">
+
+                <div class="stat-card">
+                    <p>Total Projects</p>
+                    <h2 id="totalProjects">--</h2>
+                    <span>All registered projects</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Active Projects</p>
+                    <h2 id="activeProjects">--</h2>
+                    <span>Currently in progress</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Completed Projects</p>
+                    <h2 id="completedProjects">--</h2>
+                    <span>Successfully completed</span>
+                </div>
+
+            </section>
+
+
+            <!-- Project List -->
+            <section class="project-panel">
+
+                <div class="project-toolbar">
+
+                    <div>
+                        <h2>All Projects</h2>
+                        <p>View and manage your project details.</p>
+                    </div>
+
+                    <input
+                        type="search"
+                        id="searchProjects"
+                        placeholder="Search projects...">
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table class="projects-table">
+
+                        <thead>
+                            <tr>
+                                <th>Project ID</th>
+                                <th>Project Name</th>
+                                <th>Client</th>
+                                <th>Start Date</th>
+                                <th>Expected End</th>
+                                <th>Budget</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="projectsTableBody">
+
+                            <tr>
+                                <td colspan="7">Loading projects...</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <p id="projectsMessage" role="status"></p>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- Add Project Modal -->
+    <dialog id="projectDialog" class="project-dialog">
+
+        <div class="modal-header">
+            <h2>Add New Project</h2>
+
+            <button type="button" id="closeProjectModal">×</button>
+        </div>
+
+        <p class="modal-subtitle">
+            Enter the details of your new project.
+        </p>
+
+
+        <form id="addProjectForm">
+
+            <div class="modal-form-group">
+                <label for="projectName">Project Name</label>
+                <input
+                    type="text"
+                    id="projectName"
+                    maxlength="255"
+                    placeholder="Enter project name"
+                    required>
+            </div>
+
+
+            <div class="modal-form-group">
+                <label for="projectDescription">Description</label>
+                <textarea
+                    id="projectDescription"
+                    maxlength="255"
+                    rows="3"
+                    placeholder="Describe the project"
+                    required></textarea>
+            </div>
+
+
+            <div class="modal-form-group">
+                <label for="projectClient">Select Client</label>
+
+                <select id="projectClient" required>
+                    <option value="">Loading clients...</option>
+                </select>
+            </div>
+
+
+            <div class="date-fields">
+
+                <div class="modal-form-group">
+                    <label for="startDate">Start Date</label>
+                    <input type="date" id="startDate" required>
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="expectedEndDate">Expected End Date</label>
+                    <input type="date" id="expectedEndDate" required>
+                </div>
+
+            </div>
+
+
+            <div class="modal-form-group">
+                <label for="totalAmount">Project Budget (₹)</label>
+                <input
+                    type="number"
+                    id="totalAmount"
+                    min="0"
+                    step="0.01"
+                    placeholder="Enter project budget"
+                    required>
+            </div>
+
+
+            <div class="modal-form-group">
+                <label for="projectStatus">Project Status</label>
+
+                <select id="projectStatus" required>
+                    <option value="PLANNED">Planned</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="CANCELLED">Cancelled</option>
+                </select>
+            </div>
+
+
+            <p id="projectFormMessage" role="alert"></p>
+
+
+            <div class="modal-actions">
+
+                <button type="button" id="cancelProject">
+                    Cancel
+                </button>
+
+                <button type="submit" class="save-project-button">
+                    Save Project
+                </button>
+
+            </div>
+
+        </form>
+
+    </dialog>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Furniture Management System</title>
+
+    <link rel="stylesheet" href="css/login.css">
+    <script src="js/login.js" defer></script>
+</head>
+
+<body>
+
+    <main class="login-container">
+
+        <!-- Left Side: Login Form -->
+        <section class="login-section">
+
+            <div class="brand">
+                <div class="brand-logo">F</div>
+                <span>Furniture Management</span>
+            </div>
+
+            <div class="login-content">
+
+                <h1>Welcome Back!</h1>
+
+                <p class="subtitle">
+                    Please enter your details to sign in.
+                </p>
+
+                <form id="loginForm">
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            autocomplete="username"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+
+                        <div class="password-wrapper">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required>
+
+                            <button type="button" id="togglePassword">
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-options">
+
+                        <label class="remember">
+                            <input type="checkbox" id="rememberMe">
+                            Remember me
+                        </label>
+
+                        <a href="#" id="forgotPassword">
+                            Forgot password?
+                        </a>
+
+                    </div>
+
+                    <button type="submit" class="login-button">
+                        Sign In
+                    </button>
+
+                    <p id="loginMessage" role="alert"></p>
+
+                </form>
+
+            </div>
+
+            <footer>
+                © 2026 Furniture Management System
+            </footer>
+
+        </section>
+
+
+        <!-- Right Side: Furniture Image -->
+        <section class="visual-section">
+
+            <img
+                src="images/furniture-workspace.png"
+                alt="Modern furniture workspace">
+
+            <div class="visual-overlay">
+                <h2>Manage Your Work.</h2>
+                <p>Organize projects, employees and business operations in one place.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

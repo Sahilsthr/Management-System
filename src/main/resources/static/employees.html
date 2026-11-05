@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Employees | Furniture Management</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/employees.css">
+    <script src="js/employees.js" defer></script>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">F</div>
+            <span>Furniture Management</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <p class="nav-heading">MAIN MENU</p>
+
+            <a href="admin-dashboard.html" class="nav-link">Dashboard</a>
+            <a href="clients.html" class="nav-link">Clients</a>
+            <a href="projects.html" class="nav-link">Projects</a>
+            <a href="sites.html" class="nav-link">Sites</a>
+
+            <p class="nav-heading">MANAGEMENT</p>
+
+            <a href="employees.html" class="nav-link active">Employees</a>
+            <a href="tasks.html" class="nav-link">Tasks</a>
+            <a href="#" class="nav-link">Attendance</a>
+
+            <p class="nav-heading">FINANCE</p>
+
+            <a href="#" class="nav-link">Payments</a>
+            <a href="#" class="nav-link">Expenses</a>
+            <a href="#" class="nav-link">Reports</a>
+
+        </nav>
+
+        <button id="logoutButton" class="logout-button">
+            Logout
+        </button>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+
+            <div>
+                <h2>Employee Management</h2>
+                <p>Manage your workforce and employee profiles.</p>
+            </div>
+
+            <div class="profile-info">
+
+                <div class="profile-avatar" id="profileAvatar">A</div>
+
+                <div>
+                    <strong id="adminName">Administrator</strong>
+                    <small>Admin</small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Page Heading -->
+        <section class="employees-heading">
+
+            <div>
+                <h1>Employees</h1>
+                <p>Manage employee accounts and employment details.</p>
+            </div>
+
+            <button id="addEmployeeButton" class="employee-primary-button">
+                + Add New Employee
+            </button>
+
+        </section>
+
+
+        <!-- Statistics -->
+        <section class="employees-stats-grid">
+
+            <div class="stat-card">
+                <p>Total Employees</p>
+                <h2 id="totalEmployees">--</h2>
+                <span>Registered employee profiles</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Employee Accounts</p>
+                <h2 id="employeeAccounts">--</h2>
+                <span>Login accounts with EMPLOYEE role</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Profiles Pending</p>
+                <h2 id="pendingProfiles">--</h2>
+                <span>Accounts without employee profiles</span>
+            </div>
+
+        </section>
+
+
+        <!-- Employee Table -->
+        <section class="employees-panel">
+
+            <div class="employees-toolbar">
+
+                <div>
+                    <h2>All Employees</h2>
+                    <p>Employee directory and joining information.</p>
+                </div>
+
+                <input
+                    type="search"
+                    id="searchEmployees"
+                    placeholder="Search employees..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="employees-table-wrapper">
+
+                <table class="employees-table">
+
+                    <thead>
+                        <tr>
+                            <th>EMPLOYEE ID</th>
+                            <th>EMPLOYEE NAME</th>
+                            <th>EMPLOYEE CODE</th>
+                            <th>DESIGNATION</th>
+                            <th>EMAIL</th>
+                            <th>JOINING DATE</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="employeesTableBody">
+
+                        <tr>
+                            <td colspan="6" class="table-placeholder">
+                                Loading employees...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <p id="employeesMessage" class="employees-message"></p>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- Add Employee Modal -->
+<div class="employee-modal" id="employeeDialog" aria-hidden="true">
+
+    <div class="employee-modal-content">
+
+        <div class="employee-modal-header">
+
+            <div>
+                <h2>Add New Employee</h2>
+                <p>Create an employee login account and profile.</p>
+            </div>
+
+            <button
+                type="button"
+                id="closeEmployeeModal"
+                class="employee-modal-close"
+                aria-label="Close"
+            >&times;</button>
+
+        </div>
+
+
+        <form id="addEmployeeForm">
+
+            <div class="employee-section-label">
+                Personal Details
+            </div>
+
+            <div class="employee-form-group">
+                <label for="employeeName">Full Name</label>
+
+                <input
+                    type="text"
+                    id="employeeName"
+                    maxlength="255"
+                    placeholder="Enter employee name"
+                    required
+                >
+            </div>
+
+
+            <div class="employee-form-row">
+
+                <div class="employee-form-group">
+                    <label for="employeeEmail">Email Address</label>
+
+                    <input
+                        type="email"
+                        id="employeeEmail"
+                        placeholder="employee@example.com"
+                        required
+                    >
+                </div>
+
+                <div class="employee-form-group">
+                    <label for="employeePhone">Phone Number</label>
+
+                    <input
+                        type="tel"
+                        id="employeePhone"
+                        placeholder="Enter phone number"
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="employee-form-group">
+                <label for="employeePassword">Login Password</label>
+
+                <input
+                    type="password"
+                    id="employeePassword"
+                    minlength="12"
+                    placeholder="Minimum 12 characters"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <span class="employee-field-hint">
+                    Employee will use this password to log in.
+                </span>
+            </div>
+
+
+            <div class="employee-section-label">
+                Employment Details
+            </div>
+
+
+            <div class="employee-form-row">
+
+                <div class="employee-form-group">
+                    <label for="employeeCode">Employee Code</label>
+
+                    <input
+                        type="text"
+                        id="employeeCode"
+                        placeholder="e.g. EMP013"
+                        required
+                    >
+                </div>
+
+                <div class="employee-form-group">
+                    <label for="employeeDesignation">Designation</label>
+
+                    <input
+                        type="text"
+                        id="employeeDesignation"
+                        placeholder="e.g. Carpenter"
+                        required
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="employee-form-group">
+                <label for="employeeJoiningDate">Joining Date</label>
+
+                <input
+                    type="date"
+                    id="employeeJoiningDate"
+                    required
+                >
+            </div>
+
+
+            <p id="employeeFormMessage" class="employee-form-message"></p>
+
+
+            <div class="employee-modal-actions">
+
+                <button
+                    type="button"
+                    id="cancelEmployee"
+                    class="employee-cancel-button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-employee-button"
+                >
+                    Save Employee
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

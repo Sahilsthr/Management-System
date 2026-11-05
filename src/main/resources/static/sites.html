@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sites | Furniture Management</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/sites.css">
+    <script src="js/sites.js" defer></script>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">F</div>
+            <span>Furniture Management</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <p class="nav-heading">MAIN MENU</p>
+
+            <a href="admin-dashboard.html" class="nav-link">Dashboard</a>
+            <a href="clients.html" class="nav-link">Clients</a>
+            <a href="projects.html" class="nav-link">Projects</a>
+            <a href="sites.html" class="nav-link active">Sites</a>
+
+            <p class="nav-heading">MANAGEMENT</p>
+
+            <a href="employees.html" class="nav-link">Employees</a>
+            <a href="tasks.html" class="nav-link">Tasks</a>
+            <a href="#" class="nav-link">Attendance</a>
+
+            <p class="nav-heading">FINANCE</p>
+
+            <a href="#" class="nav-link">Payments</a>
+            <a href="#" class="nav-link">Expenses</a>
+            <a href="#" class="nav-link">Reports</a>
+
+        </nav>
+
+        <button id="logoutButton" class="logout-button">
+            Logout
+        </button>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+
+            <div>
+                <h2>Site Management</h2>
+                <p>Manage project locations and site addresses.</p>
+            </div>
+
+            <div class="profile-info">
+
+                <div class="profile-avatar">A</div>
+
+                <div>
+                    <strong id="adminName">Administrator</strong>
+                    <small>Admin</small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Page Heading -->
+        <section class="sites-heading">
+
+            <div>
+                <h1>Sites</h1>
+                <p>Manage project locations and site information.</p>
+            </div>
+
+            <button id="addSiteButton" class="site-primary-button">
+                + Add New Site
+            </button>
+
+        </section>
+
+
+        <!-- Statistics -->
+        <section class="sites-stats-grid">
+
+            <div class="stat-card">
+                <p>Total Sites</p>
+                <h2 id="totalSites">0</h2>
+                <span>Registered project locations</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Sites with Coordinates</p>
+                <h2 id="sitesWithCoordinates">0</h2>
+                <span>Locations with GPS details</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Projects Without Sites</p>
+                <h2 id="projectsWithoutSites">0</h2>
+                <span>Projects awaiting a location</span>
+            </div>
+
+        </section>
+
+
+        <!-- Sites Table -->
+        <section class="sites-panel">
+
+            <div class="sites-toolbar">
+
+                <div>
+                    <h2>All Sites</h2>
+                    <p>View project locations and their details.</p>
+                </div>
+
+                <input
+                    type="search"
+                    id="searchSites"
+                    placeholder="Search sites..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="sites-table-wrapper">
+
+                <table class="sites-table">
+
+                    <thead>
+                        <tr>
+                            <th>SITE ID</th>
+                            <th>PROJECT</th>
+                            <th>ADDRESS</th>
+                            <th>CITY</th>
+                            <th>STATE</th>
+                            <th>PINCODE</th>
+                            <th>LOCATION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="sitesTableBody">
+
+                        <tr>
+                            <td colspan="7" class="table-placeholder">
+                                Loading sites...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <p id="sitesMessage" class="sites-message"></p>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- Add Site Modal -->
+<div class="site-modal" id="siteDialog" aria-hidden="true">
+
+    <div class="site-modal-content">
+
+        <div class="site-modal-header">
+
+            <div>
+                <h2>Add New Site</h2>
+                <p>Enter the project location details.</p>
+            </div>
+
+            <button
+                type="button"
+                id="closeSiteModal"
+                class="site-modal-close"
+                aria-label="Close"
+            >&times;</button>
+
+        </div>
+
+
+        <form id="addSiteForm">
+
+            <div class="site-form-group">
+                <label for="siteProject">Select Project</label>
+
+                <select id="siteProject" required>
+                    <option value="">Loading projects...</option>
+                </select>
+            </div>
+
+
+            <div class="site-form-group">
+                <label for="siteAddress">Address</label>
+
+                <textarea
+                    id="siteAddress"
+                    maxlength="255"
+                    placeholder="Enter complete site address"
+                    required
+                ></textarea>
+            </div>
+
+
+            <div class="site-form-row">
+
+                <div class="site-form-group">
+                    <label for="siteCity">City</label>
+
+                    <input
+                        type="text"
+                        id="siteCity"
+                        placeholder="Enter city"
+                        required
+                    >
+                </div>
+
+                <div class="site-form-group">
+                    <label for="siteState">State</label>
+
+                    <input
+                        type="text"
+                        id="siteState"
+                        placeholder="Enter state"
+                        required
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="site-form-group">
+                <label for="sitePincode">Pincode</label>
+
+                <input
+                    type="text"
+                    id="sitePincode"
+                    inputmode="numeric"
+                    pattern="[0-9]{6}"
+                    maxlength="6"
+                    placeholder="Enter 6-digit pincode"
+                    required
+                >
+            </div>
+
+
+            <div class="site-section-label">
+                GPS Coordinates
+                <span>Optional</span>
+            </div>
+
+
+            <div class="site-form-row">
+
+                <div class="site-form-group">
+                    <label for="siteLatitude">Latitude</label>
+
+                    <input
+                        type="number"
+                        id="siteLatitude"
+                        min="-90"
+                        max="90"
+                        step="any"
+                        placeholder="e.g. 23.0225"
+                    >
+                </div>
+
+                <div class="site-form-group">
+                    <label for="siteLongitude">Longitude</label>
+
+                    <input
+                        type="number"
+                        id="siteLongitude"
+                        min="-180"
+                        max="180"
+                        step="any"
+                        placeholder="e.g. 72.5714"
+                    >
+                </div>
+
+            </div>
+
+
+            <p id="siteFormMessage" class="form-message"></p>
+
+
+            <div class="site-modal-actions">
+
+                <button
+                    type="button"
+                    id="cancelSite"
+                    class="site-cancel-button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-site-button"
+                >
+                    Save Site
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

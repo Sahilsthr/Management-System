@@ -1,0 +1,479 @@
+/* ========================================
+   EMPLOYEES PAGE
+   Shared layout comes from dashboard.css
+======================================== */
+
+
+/* Page heading */
+
+.employees-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin: 32px 0 25px;
+}
+
+.employees-heading h1 {
+    font-size: 25px;
+    font-weight: 800;
+    color: #292721;
+}
+
+.employees-heading p {
+    color: #99938a;
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+
+/* Primary button */
+
+.employee-primary-button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #d97745;
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    white-space: nowrap;
+}
+
+.employee-primary-button:hover {
+    background: #c96b3d;
+    transform: translateY(-1px);
+}
+
+
+/* Statistics */
+
+.employees-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+/* Use the shared .stat-card design from dashboard.css */
+
+
+/* Employee table panel */
+
+.employees-panel {
+    background: #fff;
+    border: 1px solid #eee9e2;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.employees-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.employees-toolbar h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #292721;
+}
+
+.employees-toolbar p {
+    color: #99938a;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.employees-toolbar input {
+    width: 300px;
+    max-width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e8e2da;
+    border-radius: 8px;
+    background: #fff;
+    color: #292721;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 400;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.employees-toolbar input:focus {
+    border-color: #d97745;
+    box-shadow: 0 0 0 3px rgba(217, 119, 69, 0.10);
+}
+
+.employees-toolbar input::placeholder {
+    color: #aaa49b;
+}
+
+
+/* Table */
+
+.employees-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.employees-table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.employees-table thead {
+    background: #faf8f5;
+}
+
+.employees-table th {
+    padding: 15px 13px;
+    color: #8c877f;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.45px;
+    white-space: nowrap;
+}
+
+.employees-table td {
+    padding: 17px 13px;
+    border-bottom: 1px solid #eee9e2;
+    color: #77736d;
+    font-size: 12px;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+.employees-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.employees-table tbody tr:hover {
+    background: #fdfaf7;
+}
+
+.employees-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.employees-table .table-placeholder {
+    padding: 30px 15px;
+    text-align: center;
+    color: #99938a;
+    font-size: 13px;
+}
+
+.employees-message {
+    margin-top: 20px;
+    color: #99938a;
+    font-size: 12px;
+}
+
+.employees-message.success {
+    color: #258354;
+}
+
+.employees-message.error {
+    color: #d04444;
+}
+
+
+/* ========================================
+   ADD EMPLOYEE MODAL
+======================================== */
+
+.employee-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    padding: 20px;
+    background: rgba(41, 39, 33, 0.42);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(3px);
+}
+
+.employee-modal.show {
+    display: flex;
+}
+
+.employee-modal-content {
+    width: 100%;
+    max-width: 650px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #eee9e2;
+    border-radius: 14px;
+    box-shadow: 0 18px 55px rgba(41, 39, 33, 0.16);
+    animation: employeeModalOpen 0.2s ease;
+}
+
+@keyframes employeeModalOpen {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.employee-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.employee-modal-header h2 {
+    color: #292721;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.employee-modal-header p {
+    margin-top: 6px;
+    color: #99938a;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.employee-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border: 1px solid #f0e6de;
+    border-radius: 8px;
+    background: #fff3ed;
+    color: #c96b3d;
+    font-family: inherit;
+    font-size: 23px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.employee-modal-close:hover {
+    background: #f9e2d7;
+}
+
+
+/* Form section heading */
+
+.employee-section-label {
+    padding-bottom: 10px;
+    margin: 8px 0 18px;
+    border-bottom: 1px solid #eee9e2;
+    color: #c96b3d;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+
+/* Form layout */
+
+.employee-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.employee-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    margin-bottom: 18px;
+}
+
+.employee-form-group label {
+    color: #514d46;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.employee-form-group input {
+    width: 100%;
+    min-height: 44px;
+    padding: 11px 13px;
+    border: 1px solid #e8e2da;
+    border-radius: 8px;
+    outline: none;
+    background: #fff;
+    color: #292721;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.employee-form-group input::placeholder {
+    color: #aaa49b;
+}
+
+.employee-form-group input:focus {
+    border-color: #d97745;
+    box-shadow: 0 0 0 3px rgba(217, 119, 69, 0.10);
+}
+
+.employee-field-hint {
+    color: #aaa49b;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* Form messages */
+
+#employeeFormMessage.form-message {
+    margin: 0 0 14px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+#employeeFormMessage.form-message.error {
+    color: #d04444;
+}
+
+#employeeFormMessage.form-message.success {
+    color: #258354;
+}
+
+
+/* Modal action buttons */
+
+.employee-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding-top: 18px;
+    margin-top: 8px;
+    border-top: 1px solid #eee9e2;
+}
+
+.employee-cancel-button,
+.save-employee-button {
+    min-height: 40px;
+    padding: 10px 17px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.employee-cancel-button {
+    border: 1px solid #e8e2da;
+    background: #fff;
+    color: #77736d;
+}
+
+.employee-cancel-button:hover {
+    background: #f7f5f1;
+}
+
+.save-employee-button {
+    border: 1px solid #d97745;
+    background: #d97745;
+    color: #fff;
+}
+
+.save-employee-button:hover {
+    border-color: #c96b3d;
+    background: #c96b3d;
+}
+
+.save-employee-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 1100px) {
+
+    .employees-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .employees-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .employee-primary-button {
+        width: 100%;
+    }
+
+    .employees-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .employees-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .employees-toolbar input {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 520px) {
+
+    .employees-panel {
+        padding: 16px;
+    }
+
+    .employee-modal {
+        padding: 12px;
+    }
+
+    .employee-modal-content {
+        padding: 20px 17px;
+        max-height: 94vh;
+        border-radius: 12px;
+    }
+
+    .employee-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .employee-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .employee-cancel-button,
+    .save-employee-button {
+        width: 100%;
+    }
+
+}

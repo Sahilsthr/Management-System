@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Expenses | Furniture Management</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/expenses.css">
+    <script src="js/expenses.js" defer></script>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">F</div>
+            <span>Furniture Management</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <p class="nav-heading">MAIN MENU</p>
+
+            <a href="admin-dashboard.html" class="nav-link">Dashboard</a>
+            <a href="clients.html" class="nav-link">Clients</a>
+            <a href="projects.html" class="nav-link">Projects</a>
+            <a href="sites.html" class="nav-link">Sites</a>
+
+            <p class="nav-heading">MANAGEMENT</p>
+
+            <a href="employees.html" class="nav-link">Employees</a>
+            <a href="tasks.html" class="nav-link">Tasks</a>
+            <a href="attendance.html" class="nav-link">Attendance</a>
+
+            <p class="nav-heading">FINANCE</p>
+
+            <a href="payments.html" class="nav-link">Payments</a>
+            <a href="expenses.html" class="nav-link active">Expenses</a>
+            <a href="reports.html" class="nav-link">Reports</a>
+
+        </nav>
+
+        <button id="logoutButton" class="logout-button">
+            Logout
+        </button>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+
+            <div>
+                <h2>Expense Management</h2>
+                <p>Track project costs and business expenditure.</p>
+            </div>
+
+            <div class="profile-info">
+
+                <div class="profile-avatar">A</div>
+
+                <div>
+                    <strong id="adminName">Administrator</strong>
+                    <small>Admin</small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Page Heading -->
+        <section class="expenses-heading">
+
+            <div>
+                <h1>Expenses</h1>
+                <p>Manage material, labour and other project expenses.</p>
+            </div>
+
+            <button id="addExpenseButton" class="expense-primary-button">
+                + Record New Expense
+            </button>
+
+        </section>
+
+
+        <!-- Statistics -->
+        <section class="expenses-stats-grid">
+
+            <div class="stat-card">
+                <p>Total Expenses</p>
+                <h2 id="totalExpenses">--</h2>
+                <span>All recorded project expenses</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Material Expenses</p>
+                <h2 id="materialExpenses">--</h2>
+                <span>Wood and hardware costs</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Labour Expenses</p>
+                <h2 id="labourExpenses">--</h2>
+                <span>Workforce-related expenses</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Transport Expenses</p>
+                <h2 id="transportExpenses">--</h2>
+                <span>Transportation costs</span>
+            </div>
+
+        </section>
+
+
+        <!-- Expenses Table -->
+        <section class="expenses-panel">
+
+            <div class="expenses-toolbar">
+
+                <div>
+                    <h2>Expense Records</h2>
+                    <p>View and track expenses across projects.</p>
+                </div>
+
+                <div class="expenses-filters">
+
+                    <input
+                        type="search"
+                        id="searchExpenses"
+                        placeholder="Search expenses..."
+                        autocomplete="off"
+                    >
+
+                    <select id="expenseProjectFilter">
+                        <option value="ALL">All Projects</option>
+                    </select>
+
+                    <select id="expenseCategoryFilter">
+                        <option value="ALL">All Categories</option>
+                        <option value="WOOD">Wood</option>
+                        <option value="HARDWARE">Hardware</option>
+                        <option value="LABOUR">Labour</option>
+                        <option value="TRANSPORT">Transport</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Table -->
+            <div class="expenses-table-wrapper">
+
+                <table class="expenses-table">
+
+                    <thead>
+                        <tr>
+                            <th>EXPENSE ID</th>
+                            <th>PROJECT</th>
+                            <th>CATEGORY</th>
+                            <th>AMOUNT</th>
+                            <th>EXPENSE DATE</th>
+                            <th>DESCRIPTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="expensesTableBody">
+
+                        <tr>
+                            <td colspan="6" class="table-placeholder">
+                                Loading expenses...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <p id="expensesMessage" class="expenses-message"></p>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- Add Expense Modal -->
+<div class="expense-modal" id="expenseDialog" aria-hidden="true">
+
+    <div class="expense-modal-content">
+
+        <div class="expense-modal-header">
+
+            <div>
+                <h2>Record New Expense</h2>
+                <p>Enter the details of a project expense.</p>
+            </div>
+
+            <button
+                type="button"
+                id="closeExpenseModal"
+                class="expense-modal-close"
+                aria-label="Close"
+            >&times;</button>
+
+        </div>
+
+
+        <form id="addExpenseForm">
+
+            <div class="expense-form-group">
+
+                <label for="expenseProject">Select Project</label>
+
+                <select id="expenseProject" required>
+                    <option value="">Loading projects...</option>
+                </select>
+
+            </div>
+
+
+            <div class="expense-form-group">
+
+                <label for="expenseAmount">Expense Amount (₹)</label>
+
+                <input
+                    type="number"
+                    id="expenseAmount"
+                    min="0.01"
+                    max="9999999999.99"
+                    step="0.01"
+                    placeholder="Enter expense amount"
+                    required
+                >
+
+            </div>
+
+
+            <div class="expense-form-row">
+
+                <div class="expense-form-group">
+
+                    <label for="expenseCategory">Expense Category</label>
+
+                    <select id="expenseCategory" required>
+                        <option value="">Select category</option>
+                        <option value="WOOD">Wood</option>
+                        <option value="HARDWARE">Hardware</option>
+                        <option value="LABOUR">Labour</option>
+                        <option value="TRANSPORT">Transport</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+
+                </div>
+
+                <div class="expense-form-group">
+
+                    <label for="expenseDate">Expense Date</label>
+
+                    <input
+                        type="date"
+                        id="expenseDate"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="expense-form-group">
+
+                <label for="expenseDescription">Description</label>
+
+                <textarea
+                    id="expenseDescription"
+                    maxlength="500"
+                    rows="3"
+                    placeholder="Enter expense details (optional)"
+                ></textarea>
+
+                <span class="expense-field-hint">
+                    Maximum 500 characters.
+                </span>
+
+            </div>
+
+
+            <p id="expenseFormMessage" class="expense-form-message"></p>
+
+
+            <div class="expense-modal-actions">
+
+                <button
+                    type="button"
+                    id="cancelExpense"
+                    class="expense-cancel-button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-expense-button"
+                >
+                    Save Expense
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

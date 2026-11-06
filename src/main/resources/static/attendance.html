@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance | Furniture Management</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/attendance.css">
+    <script src="js/attendance.js" defer></script>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-logo">F</div>
+            <span>Furniture Management</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <p class="nav-heading">MAIN MENU</p>
+
+            <a href="admin-dashboard.html" class="nav-link">Dashboard</a>
+            <a href="clients.html" class="nav-link">Clients</a>
+            <a href="projects.html" class="nav-link">Projects</a>
+            <a href="sites.html" class="nav-link">Sites</a>
+
+            <p class="nav-heading">MANAGEMENT</p>
+
+            <a href="employees.html" class="nav-link">Employees</a>
+            <a href="tasks.html" class="nav-link">Tasks</a>
+            <a href="attendance.html" class="nav-link active">Attendance</a>
+
+            <p class="nav-heading">FINANCE</p>
+
+            <a href="payments.html" class="nav-link">Payments</a>
+            <a href="expenses.html" class="nav-link">Expenses</a>
+            <a href="reports.html" class="nav-link">Reports</a>
+        </nav>
+
+        <button id="logoutButton" class="logout-button">Logout</button>
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h2>Attendance Management</h2>
+                <p>Monitor employee attendance and requests.</p>
+            </div>
+
+            <div class="profile-info">
+                <div class="profile-avatar">A</div>
+                <div>
+                    <strong id="adminName">Administrator</strong>
+                    <small>Admin</small>
+                </div>
+            </div>
+        </header>
+
+
+        <section class="attendance-heading">
+            <div>
+                <h1>Attendance</h1>
+                <p>Manage attendance records and employee requests.</p>
+            </div>
+
+            <button id="addAttendanceRequestButton"
+                    class="attendance-primary-button">
+                + Create Attendance Request
+            </button>
+        </section>
+
+
+        <!-- Statistics -->
+        <section class="attendance-stats-grid">
+
+            <div class="stat-card">
+                <p>Total Attendance</p>
+                <h2 id="totalAttendance">--</h2>
+                <span>Recorded attendance entries</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Pending Requests</p>
+                <h2 id="pendingRequests">--</h2>
+                <span>Awaiting admin review</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Approved Requests</p>
+                <h2 id="approvedRequests">--</h2>
+                <span>Attendance confirmed</span>
+            </div>
+
+            <div class="stat-card">
+                <p>Rejected Requests</p>
+                <h2 id="rejectedRequests">--</h2>
+                <span>Requests not approved</span>
+            </div>
+
+        </section>
+
+
+        <!-- Tabs -->
+        <div class="attendance-tabs">
+            <button class="attendance-tab active"
+                    id="attendanceTabButton"
+                    data-tab="records">
+                Attendance Records
+            </button>
+
+            <button class="attendance-tab"
+                    id="requestsTabButton"
+                    data-tab="requests">
+                Attendance Requests
+                <span id="pendingTabCount">0</span>
+            </button>
+        </div>
+
+
+        <!-- Attendance Records -->
+        <section class="attendance-panel" id="attendanceRecordsPanel">
+
+            <!-- Monthly attendance calendar -->
+            <div class="attendance-calendar-layout">
+
+                <section class="attendance-calendar-card" aria-labelledby="attendanceCalendarTitle">
+                    <div class="attendance-calendar-header">
+                        <div>
+                            <span class="attendance-calendar-eyebrow">MONTHLY OVERVIEW</span>
+                            <h2 id="attendanceCalendarTitle">Attendance Calendar</h2>
+                            <p>See which dates have recorded attendance.</p>
+                        </div>
+
+                        <div class="attendance-calendar-month-control">
+                            <button type="button" id="previousCalendarMonth" class="calendar-month-button" aria-label="Previous month">&#8249;</button>
+                            <strong id="attendanceCalendarMonth">Month Year</strong>
+                            <button type="button" id="nextCalendarMonth" class="calendar-month-button" aria-label="Next month">&#8250;</button>
+                        </div>
+                    </div>
+
+                    <div class="attendance-calendar-summary">
+                        <div class="calendar-summary-item">
+                            <span>Days with records</span>
+                            <strong id="calendarMarkedDays">0</strong>
+                        </div>
+                        <div class="calendar-summary-item">
+                            <span>Attendance entries</span>
+                            <strong id="calendarMonthEntries">0</strong>
+                        </div>
+                    </div>
+
+                    <div class="attendance-calendar-weekdays" aria-hidden="true">
+                        <span>Mon</span>
+                        <span>Tue</span>
+                        <span>Wed</span>
+                        <span>Thu</span>
+                        <span>Fri</span>
+                        <span>Sat</span>
+                        <span>Sun</span>
+                    </div>
+
+                    <div id="attendanceCalendarGrid" class="attendance-calendar-grid" aria-label="Attendance dates">
+                        <p class="calendar-loading">Loading calendar...</p>
+                    </div>
+
+                    <div class="attendance-calendar-legend">
+                        <span><i class="calendar-legend-dot present"></i> Present</span>
+                        <span><i class="calendar-legend-dot absent"></i> Absent</span>
+                        <span><i class="calendar-legend-dot mixed"></i> Mixed / multiple statuses</span>
+                    </div>
+                </section>
+
+                <aside class="attendance-day-card" aria-live="polite">
+                    <div class="attendance-day-card-header">
+                        <div>
+                            <span class="attendance-calendar-eyebrow">DAY DETAILS</span>
+                            <h2 id="calendarSelectedDate">Select a date</h2>
+                            <p id="calendarSelectedHint">Choose a date in the calendar to view attendance.</p>
+                        </div>
+                        <div class="calendar-day-icon" aria-hidden="true">&#128197;</div>
+                    </div>
+
+                    <div class="attendance-day-summary">
+                        <div class="day-summary-box total">
+                            <strong id="calendarDayTotal">0</strong>
+                            <span>Total</span>
+                        </div>
+                        <div class="day-summary-box present">
+                            <strong id="calendarDayPresent">0</strong>
+                            <span>Present</span>
+                        </div>
+                        <div class="day-summary-box absent">
+                            <strong id="calendarDayAbsent">0</strong>
+                            <span>Absent</span>
+                        </div>
+                    </div>
+
+                    <div class="calendar-day-list-heading">
+                        <h3>Employee attendance</h3>
+                        <span id="calendarDayRecordCount">0 records</span>
+                    </div>
+
+                    <div id="calendarDayRecords" class="calendar-day-records">
+                        <div class="calendar-day-empty">Select a calendar date to see its records.</div>
+                    </div>
+
+                    <button type="button" id="clearCalendarDate" class="calendar-clear-button">
+                        Clear date filter
+                    </button>
+                </aside>
+
+            </div>
+
+            <div class="attendance-toolbar">
+                <div>
+                    <h2>Attendance Records</h2>
+                    <p>View employee attendance history.</p>
+                </div>
+
+                <div class="attendance-filters">
+                    <input type="search"
+                           id="searchAttendance"
+                           placeholder="Search attendance...">
+
+                    <input type="date" id="attendanceDateFilter">
+
+                    <select id="attendanceStatusFilter">
+                        <option value="ALL">All Status</option>
+                        <option value="PRESENT">Present</option>
+                        <option value="ABSENT">Absent</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="attendance-table-wrapper">
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>EMPLOYEE</th>
+                            <th>EMPLOYEE CODE</th>
+                            <th>PROJECT</th>
+                            <th>DATE</th>
+                            <th>STATUS</th>
+                            <th>MARKED AT</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="attendanceTableBody">
+                        <tr>
+                            <td colspan="7" class="table-placeholder">
+                                Loading attendance...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p id="attendanceRecordsMessage" class="attendance-message"></p>
+        </section>
+
+
+        <!-- Attendance Requests -->
+        <section class="attendance-panel hidden"
+                 id="attendanceRequestsPanel">
+
+            <div class="attendance-toolbar">
+                <div>
+                    <h2>Attendance Requests</h2>
+                    <p>Review and manage employee attendance requests.</p>
+                </div>
+
+                <div class="attendance-filters">
+                    <input type="search"
+                           id="searchRequests"
+                           placeholder="Search requests...">
+
+                    <select id="requestStatusFilter">
+                        <option value="ALL">All Requests</option>
+                        <option value="PENDING">Pending</option>
+                        <option value="APPROVED">Approved</option>
+                        <option value="REJECTED">Rejected</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="attendance-table-wrapper">
+                <table class="attendance-table requests-table">
+                    <thead>
+                        <tr>
+                            <th>REQUEST ID</th>
+                            <th>EMPLOYEE</th>
+                            <th>CODE</th>
+                            <th>PROJECT</th>
+                            <th>ATTENDANCE DATE</th>
+                            <th>REQUESTED AT</th>
+                            <th>STATUS</th>
+                            <th>REMARK</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="requestsTableBody">
+                        <tr>
+                            <td colspan="9" class="table-placeholder">
+                                Loading requests...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p id="requestsMessage" class="attendance-message"></p>
+        </section>
+
+    </main>
+</div>
+
+
+<!-- Create Attendance Request Modal -->
+<div class="attendance-modal" id="requestDialog" aria-hidden="true">
+
+    <div class="attendance-modal-content">
+
+        <div class="attendance-modal-header">
+            <div>
+                <h2>Create Attendance Request</h2>
+                <p>Select an employee, project and attendance date.</p>
+            </div>
+
+            <button type="button"
+                    id="closeRequestModal"
+                    class="attendance-modal-close">&times;</button>
+        </div>
+
+        <form id="createRequestForm">
+
+            <div class="attendance-form-group">
+                <label for="requestProject">Select Project</label>
+                <select id="requestProject" required>
+                    <option value="">Loading projects...</option>
+                </select>
+            </div>
+
+            <div class="attendance-form-group">
+                <label for="requestEmployee">Select Employee</label>
+                <select id="requestEmployee" required disabled>
+                    <option value="">First select a project</option>
+                </select>
+                <span class="attendance-hint">
+                    Only employees assigned to the selected project are available.
+                </span>
+            </div>
+
+            <div class="attendance-form-group">
+                <label for="requestDate">Attendance Date</label>
+                <input type="date" id="requestDate" required>
+                <span class="attendance-hint">
+                    Only today or previous dates can be selected.
+                </span>
+            </div>
+
+            <p id="requestFormMessage" class="attendance-form-message"></p>
+
+            <div class="attendance-modal-actions">
+                <button type="button"
+                        id="cancelRequest"
+                        class="attendance-cancel-button">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                        class="attendance-save-button">
+                    Submit Request
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<!-- Review Request Modal -->
+<div class="attendance-modal" id="reviewDialog" aria-hidden="true">
+
+    <div class="attendance-modal-content review-modal-content">
+
+        <div class="attendance-modal-header">
+            <div>
+                <h2 id="reviewTitle">Review Request</h2>
+                <p id="reviewDescription">Review the attendance request.</p>
+            </div>
+
+            <button type="button"
+                    id="closeReviewModal"
+                    class="attendance-modal-close">&times;</button>
+        </div>
+
+        <form id="reviewRequestForm">
+
+            <div class="attendance-review-summary" id="reviewSummary"></div>
+
+            <div class="attendance-form-group">
+                <label for="reviewRemark">Remark (Optional)</label>
+                <textarea id="reviewRemark"
+                          rows="3"
+                          maxlength="500"
+                          placeholder="Enter a remark..."></textarea>
+            </div>
+
+            <p id="reviewFormMessage" class="attendance-form-message"></p>
+
+            <div class="attendance-modal-actions">
+                <button type="button"
+                        id="cancelReview"
+                        class="attendance-cancel-button">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                        id="confirmReviewButton"
+                        class="attendance-save-button">
+                    Confirm
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

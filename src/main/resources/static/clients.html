@@ -1,71 +1,87 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Clients | Furniture Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="css/clients.css">
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <link rel="stylesheet" href="css/clients.css" />
 
     <script src="js/clients.js" defer></script>
+    <script src="js/dashboard.js" defer></script>
 </head>
 
 <body>
-
     <div class="dashboard-container">
-
-        <!-- Sidebar -->
-        <aside class="sidebar">
-
+        <!-- Mobile Top Header (Sidebar ke bilkul upar) -->
+        <div class="mobile-header">
             <div class="brand">
+                <div class="brand-logo">F</div>
+                <span>Furniture Management</span>
+            </div>
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+                <i class="ri-menu-line"></i>
+            </button>
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand desktop-only">
                 <div class="brand-logo">F</div>
                 <span>Furniture Management</span>
             </div>
 
             <nav class="sidebar-nav">
-
                 <p class="nav-heading">MAIN MENU</p>
-
                 <a href="admin-dashboard.html" class="nav-link">
-                    Dashboard
+                    <i class="ri-dashboard-line"></i> Dashboard
                 </a>
-
-                <a href="clients.html" class="nav-link active">
-                    Clients
+                <a href="clients.html" class="nav-link">
+                    <i class="ri-user-star-line"></i> Clients
                 </a>
-
-                <a href="projects.html" class="nav-link">Projects</a>
-                <a href="sites.html" class="nav-link">Sites</a>
+                <a href="projects.html" class="nav-link active">
+                    <i class="ri-folder-3-line"></i> Projects
+                </a>
+                <a href="sites.html" class="nav-link">
+                    <i class="ri-map-pin-line"></i> Sites
+                </a>
 
                 <p class="nav-heading">MANAGEMENT</p>
-
-                <a href="employees.html" class="nav-link">Employees</a>
-                <a href="tasks.html" class="nav-link">Tasks</a>
-                <a href="attendance.html" class="nav-link">Attendance</a>
+                <a href="employees.html" class="nav-link">
+                    <i class="ri-team-line"></i> Employees
+                </a>
+                <a href="tasks.html" class="nav-link">
+                    <i class="ri-task-line"></i> Tasks
+                </a>
+                <a href="attendance.html" class="nav-link">
+                    <i class="ri-calendar-check-line"></i> Attendance
+                </a>
 
                 <p class="nav-heading">FINANCE</p>
-
-                <a href="payments.html" class="nav-link">Payments</a>
-                <a href="expenses.html" class="nav-link">Expenses</a>
-                <a href="reports.html" class="nav-link">Reports</a>
-
+                <a href="payments.html" class="nav-link">
+                    <i class="ri-wallet-3-line"></i> Payments
+                </a>
+                <a href="expenses.html" class="nav-link">
+                    <i class="ri-money-dollar-box-line"></i> Expenses
+                </a>
+                <a href="reports.html" class="nav-link">
+                    <i class="ri-file-chart-line"></i> Reports
+                </a>
             </nav>
 
-            <button id="logoutButton" class="logout-button">
-                Logout
-            </button>
-
+            <div class="sidebar-footer">
+                <button id="logoutButton" class="logout-button">
+                    <i class="ri-logout-box-r-line"></i> Logout
+                </button>
+            </div>
         </aside>
-
-
         <!-- Main Content -->
         <main class="main-content">
-
             <header class="topbar">
-
                 <div>
                     <h2>Clients</h2>
                     <p>Manage your business clients.</p>
@@ -79,13 +95,10 @@
                         <small>Admin</small>
                     </div>
                 </div>
-
             </header>
-
 
             <!-- Page Heading -->
             <section class="clients-heading">
-
                 <div>
                     <h1>Client Management</h1>
                     <p>View and manage all your registered clients.</p>
@@ -94,44 +107,30 @@
                 <button id="addClientButton" class="add-client-button">
                     + Add New Client
                 </button>
-
             </section>
-
 
             <!-- Client Statistics -->
             <section class="client-summary">
-
                 <div class="stat-card">
                     <p>Total Clients</p>
                     <h2 id="totalClients">--</h2>
                     <span>Registered clients</span>
                 </div>
-
             </section>
-
 
             <!-- Client List -->
             <section class="client-panel">
-
                 <div class="client-toolbar">
-
                     <div>
                         <h2>All Clients</h2>
                         <p>Manage your client information.</p>
                     </div>
 
-                    <input
-                        type="search"
-                        id="searchClients"
-                        placeholder="Search clients...">
-
+                    <input type="search" id="searchClients" placeholder="Search clients..." />
                 </div>
 
-
                 <div class="table-container">
-
                     <table class="clients-table">
-
                         <thead>
                             <tr>
                                 <th>Client ID</th>
@@ -143,93 +142,85 @@
                         </thead>
 
                         <tbody id="clientsTableBody">
-
                             <tr>
-                                <td colspan="5">
-                                    Loading clients...
-                                </td>
+                                <td colspan="5">Loading clients...</td>
                             </tr>
-
                         </tbody>
-
                     </table>
-
                 </div>
 
                 <p id="clientsMessage" role="status"></p>
-
             </section>
             <!-- Add Client Modal -->
             <dialog id="clientDialog" class="client-dialog">
-
                 <div class="modal-header">
                     <h2>Add New Client</h2>
                     <button type="button" id="closeClientModal">×</button>
                 </div>
 
-                <p class="modal-subtitle">
-                    Enter the details of your new client.
-                </p>
+                <p class="modal-subtitle">Enter the details of your new client.</p>
 
                 <form id="addClientForm">
-
                     <div class="modal-form-group">
                         <label for="clientName">Client Name</label>
-                        <input
-                            type="text"
-                            id="clientName"
-                            placeholder="Enter client name"
-                            required>
+                        <input type="text" id="clientName" placeholder="Enter client name" required />
                     </div>
 
                     <div class="modal-form-group">
                         <label for="clientPhone">Phone Number</label>
-                        <input
-                            type="tel"
-                            id="clientPhone"
-                            placeholder="10-digit phone number"
-                            pattern="[0-9]{10}"
-                            maxlength="10"
-                            required>
+                        <input type="tel" id="clientPhone" placeholder="10-digit phone number" pattern="[0-9]{10}"
+                            maxlength="10" required />
                     </div>
 
                     <div class="modal-form-group">
                         <label for="clientEmail">Email Address</label>
-                        <input
-                            type="email"
-                            id="clientEmail"
-                            placeholder="Enter email address"
-                            required>
+                        <input type="email" id="clientEmail" placeholder="Enter email address" required />
                     </div>
 
                     <div class="modal-form-group">
                         <label for="clientAddress">Address</label>
-                        <textarea
-                            id="clientAddress"
-                            placeholder="Enter complete address"
-                            rows="3"
-                            required></textarea>
+                        <textarea id="clientAddress" placeholder="Enter complete address" rows="3" required></textarea>
                     </div>
 
                     <p id="formMessage" role="alert"></p>
 
                     <div class="modal-actions">
-                        <button type="button" id="cancelClient">
-                            Cancel
-                        </button>
+                        <button type="button" id="cancelClient">Cancel</button>
 
                         <button type="submit" class="save-client-button">
                             Save Client
                         </button>
                     </div>
-
                 </form>
-
             </dialog>
-
         </main>
+        <!-- Overlay Backdrop -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+        <!-- Mobile Bottom Navigation Bar -->
+        <nav class="mobile-bottom-nav">
+            <a href="admin-dashboard.html" class="bottom-nav-item">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="projects.html" class="bottom-nav-item">
+                <i class="ri-folder-3-line"></i>
+                <span>Projects</span>
+            </a>
+            <a href="attendance.html" class="bottom-nav-item">
+                <i class="ri-calendar-check-line"></i>
+                <span>Attendance</span>
+            </a>
+            <a href="payments.html" class="bottom-nav-item">
+                <i class="ri-wallet-3-line"></i>
+                <span>Payments</span>
+            </a>
+            <a href="#" class="bottom-nav-item" id="openMobileMenu">
+                <i class="ri-menu-4-line"></i>
+                <span>More</span>
+            </a>
+        </nav>
     </div>
-
 </body>
+
 </html>

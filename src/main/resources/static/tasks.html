@@ -6,316 +6,338 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Tasks | Furniture Management</title>
-
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/tasks.css">
     <script src="js/tasks.js" defer></script>
+    <script src="js/dashboard.js" defer></script>
 </head>
 
 <body>
 
-<div class="dashboard-container">
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-
-        <div class="brand">
-            <div class="brand-logo">F</div>
-            <span>Furniture Management</span>
-        </div>
-
-        <nav class="sidebar-nav">
-
-            <p class="nav-heading">MAIN MENU</p>
-
-            <a href="admin-dashboard.html" class="nav-link">Dashboard</a>
-            <a href="clients.html" class="nav-link">Clients</a>
-            <a href="projects.html" class="nav-link">Projects</a>
-            <a href="sites.html" class="nav-link">Sites</a>
-
-            <p class="nav-heading">MANAGEMENT</p>
-
-            <a href="employees.html" class="nav-link">Employees</a>
-            <a href="tasks.html" class="nav-link active">Tasks</a>
-            <a href="attendance.html" class="nav-link">Attendance</a>
-
-            <p class="nav-heading">FINANCE</p>
-
-            <a href="#" class="nav-link">Payments</a>
-            <a href="#" class="nav-link">Expenses</a>
-            <a href="#" class="nav-link">Reports</a>
-
-        </nav>
-
-        <button id="logoutButton" class="logout-button">
-            Logout
-        </button>
-
-    </aside>
-
-
-    <!-- Main Content -->
-    <main class="main-content">
-
-        <!-- Topbar -->
-        <header class="topbar">
-
-            <div>
-                <h2>Task Management</h2>
-                <p>Manage project tasks and employee assignments.</p>
+    <div class="dashboard-container">
+        <!-- Mobile Top Header (Sidebar ke bilkul upar) -->
+        <div class="mobile-header">
+            <div class="brand">
+                <div class="brand-logo">F</div>
+                <span>Furniture Management</span>
             </div>
-
-            <div class="profile-info">
-
-                <div class="profile-avatar">A</div>
-
-                <div>
-                    <strong id="adminName">Administrator</strong>
-                    <small>Admin</small>
-                </div>
-
-            </div>
-
-        </header>
-
-
-        <!-- Page Heading -->
-        <section class="tasks-heading">
-
-            <div>
-                <h1>Tasks</h1>
-                <p>Create, assign and monitor project tasks.</p>
-            </div>
-
-            <button id="addTaskButton" class="task-primary-button">
-                + Create New Task
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+                <i class="ri-menu-line"></i>
             </button>
-
-        </section>
-
-
-        <!-- Statistics -->
-        <section class="tasks-stats-grid">
-
-            <div class="stat-card">
-                <p>Total Tasks</p>
-                <h2 id="totalTasks">--</h2>
-                <span>All project tasks</span>
-            </div>
-
-            <div class="stat-card">
-                <p>Pending Tasks</p>
-                <h2 id="pendingTasks">--</h2>
-                <span>Waiting to start</span>
-            </div>
-
-            <div class="stat-card">
-                <p>In Progress</p>
-                <h2 id="inProgressTasks">--</h2>
-                <span>Currently being worked on</span>
-            </div>
-
-            <div class="stat-card">
-                <p>Completed Tasks</p>
-                <h2 id="completedTasks">--</h2>
-                <span>Successfully completed</span>
-            </div>
-
-        </section>
-
-
-        <!-- Tasks Table -->
-        <section class="tasks-panel">
-
-            <div class="tasks-toolbar">
-
-                <div>
-                    <h2>All Tasks</h2>
-                    <p>Track work across projects and employees.</p>
-                </div>
-
-                <div class="tasks-filters">
-
-                    <input
-                        type="search"
-                        id="searchTasks"
-                        placeholder="Search tasks..."
-                        autocomplete="off"
-                    >
-
-                    <select id="filterTaskStatus">
-                        <option value="ALL">All Status</option>
-                        <option value="PENDING">Pending</option>
-                        <option value="IN_PROGRESS">In Progress</option>
-                        <option value="COMPLETED">Completed</option>
-                    </select>
-
-                </div>
-
-            </div>
-
-
-            <div class="tasks-table-wrapper">
-
-                <table class="tasks-table">
-
-                    <thead>
-                        <tr>
-                            <th>TASK ID</th>
-                            <th>TASK NAME</th>
-                            <th>PROJECT</th>
-                            <th>ASSIGNED EMPLOYEE</th>
-                            <th>PRIORITY</th>
-                            <th>DUE DATE</th>
-                            <th>STATUS</th>
-                            <th>UPDATE STATUS</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="tasksTableBody">
-
-                        <tr>
-                            <td colspan="8" class="table-placeholder">
-                                Loading tasks...
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-            <p id="tasksMessage" class="tasks-message"></p>
-
-        </section>
-
-    </main>
-
-</div>
-
-
-<!-- Create Task Modal -->
-<div class="task-modal" id="taskDialog" aria-hidden="true">
-
-    <div class="task-modal-content">
-
-        <div class="task-modal-header">
-
-            <div>
-                <h2>Create New Task</h2>
-                <p>Add a task and assign it to a project employee.</p>
-            </div>
-
-            <button
-                type="button"
-                id="closeTaskModal"
-                class="task-modal-close"
-                aria-label="Close"
-            >&times;</button>
-
         </div>
 
-
-        <form id="addTaskForm">
-
-            <div class="task-form-group">
-                <label for="taskName">Task Name</label>
-
-                <input
-                    type="text"
-                    id="taskName"
-                    maxlength="255"
-                    placeholder="Enter task name"
-                    required
-                >
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand desktop-only">
+                <div class="brand-logo">F</div>
+                <span>Furniture Management</span>
             </div>
 
+            <nav class="sidebar-nav">
+                <p class="nav-heading">MAIN MENU</p>
+                <a href="admin-dashboard.html" class="nav-link">
+                    <i class="ri-dashboard-line"></i> Dashboard
+                </a>
+                <a href="clients.html" class="nav-link">
+                    <i class="ri-user-star-line"></i> Clients
+                </a>
+                <a href="projects.html" class="nav-link active">
+                    <i class="ri-folder-3-line"></i> Projects
+                </a>
+                <a href="sites.html" class="nav-link">
+                    <i class="ri-map-pin-line"></i> Sites
+                </a>
 
-            <div class="task-form-group">
-                <label for="taskDescription">Description</label>
+                <p class="nav-heading">MANAGEMENT</p>
+                <a href="employees.html" class="nav-link">
+                    <i class="ri-team-line"></i> Employees
+                </a>
+                <a href="tasks.html" class="nav-link">
+                    <i class="ri-task-line"></i> Tasks
+                </a>
+                <a href="attendance.html" class="nav-link">
+                    <i class="ri-calendar-check-line"></i> Attendance
+                </a>
 
-                <textarea
-                    id="taskDescription"
-                    placeholder="Describe the work to be completed"
-                    rows="3"
-                ></textarea>
+                <p class="nav-heading">FINANCE</p>
+                <a href="payments.html" class="nav-link">
+                    <i class="ri-wallet-3-line"></i> Payments
+                </a>
+                <a href="expenses.html" class="nav-link">
+                    <i class="ri-money-dollar-box-line"></i> Expenses
+                </a>
+                <a href="reports.html" class="nav-link">
+                    <i class="ri-file-chart-line"></i> Reports
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button id="logoutButton" class="logout-button">
+                    <i class="ri-logout-box-r-line"></i> Logout
+                </button>
             </div>
+        </aside>
 
+        <!-- Main Content -->
+        <main class="main-content">
 
-            <div class="task-form-group">
-                <label for="taskProject">Select Project</label>
+            <!-- Topbar -->
+            <header class="topbar">
 
-                <select id="taskProject" required>
-                    <option value="">Loading projects...</option>
-                </select>
-            </div>
-
-
-            <div class="task-form-group">
-                <label for="taskEmployee">Assign Employee</label>
-
-                <select id="taskEmployee" required disabled>
-                    <option value="">First select a project</option>
-                </select>
-
-                <span class="task-field-hint">
-                    Only employees assigned to the selected project will appear.
-                </span>
-            </div>
-
-
-            <div class="task-form-row">
-
-                <div class="task-form-group">
-                    <label for="taskPriority">Priority</label>
-
-                    <select id="taskPriority" required>
-                        <option value="LOW">Low</option>
-                        <option value="MEDIUM" selected>Medium</option>
-                        <option value="HIGH">High</option>
-                    </select>
+                <div>
+                    <h2>Task Management</h2>
+                    <p>Manage project tasks and employee assignments.</p>
                 </div>
 
-                <div class="task-form-group">
-                    <label for="taskDueDate">Due Date</label>
+                <div class="profile-info">
 
-                    <input
-                        type="date"
-                        id="taskDueDate"
-                    >
+                    <div class="profile-avatar">A</div>
+
+                    <div>
+                        <strong id="adminName">Administrator</strong>
+                        <small>Admin</small>
+                    </div>
+
                 </div>
 
-            </div>
+            </header>
 
 
-            <p id="taskFormMessage" class="task-form-message"></p>
+            <!-- Page Heading -->
+            <section class="tasks-heading">
 
+                <div>
+                    <h1>Tasks</h1>
+                    <p>Create, assign and monitor project tasks.</p>
+                </div>
 
-            <div class="task-modal-actions">
-
-                <button
-                    type="button"
-                    id="cancelTask"
-                    class="task-cancel-button"
-                >
-                    Cancel
+                <button id="addTaskButton" class="task-primary-button">
+                    + Create New Task
                 </button>
 
-                <button
-                    type="submit"
-                    class="save-task-button"
-                >
-                    Create Task
-                </button>
+            </section>
 
-            </div>
 
-        </form>
+            <!-- Statistics -->
+            <section class="tasks-stats-grid">
+
+                <div class="stat-card">
+                    <p>Total Tasks</p>
+                    <h2 id="totalTasks">--</h2>
+                    <span>All project tasks</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Pending Tasks</p>
+                    <h2 id="pendingTasks">--</h2>
+                    <span>Waiting to start</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>In Progress</p>
+                    <h2 id="inProgressTasks">--</h2>
+                    <span>Currently being worked on</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Completed Tasks</p>
+                    <h2 id="completedTasks">--</h2>
+                    <span>Successfully completed</span>
+                </div>
+
+            </section>
+
+
+            <!-- Tasks Table -->
+            <section class="tasks-panel">
+
+                <div class="tasks-toolbar">
+
+                    <div>
+                        <h2>All Tasks</h2>
+                        <p>Track work across projects and employees.</p>
+                    </div>
+
+                    <div class="tasks-filters">
+
+                        <input type="search" id="searchTasks" placeholder="Search tasks..." autocomplete="off">
+
+                        <select id="filterTaskStatus">
+                            <option value="ALL">All Status</option>
+                            <option value="PENDING">Pending</option>
+                            <option value="IN_PROGRESS">In Progress</option>
+                            <option value="COMPLETED">Completed</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="tasks-table-wrapper">
+
+                    <table class="tasks-table">
+
+                        <thead>
+                            <tr>
+                                <th>TASK ID</th>
+                                <th>TASK NAME</th>
+                                <th>PROJECT</th>
+                                <th>ASSIGNED EMPLOYEE</th>
+                                <th>PRIORITY</th>
+                                <th>DUE DATE</th>
+                                <th>STATUS</th>
+                                <th>UPDATE STATUS</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tasksTableBody">
+
+                            <tr>
+                                <td colspan="8" class="table-placeholder">
+                                    Loading tasks...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <p id="tasksMessage" class="tasks-message"></p>
+
+            </section>
+
+        </main>
+        <!-- Overlay Backdrop -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Mobile Bottom Navigation Bar -->
+        <nav class="mobile-bottom-nav">
+            <a href="admin-dashboard.html" class="bottom-nav-item">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="projects.html" class="bottom-nav-item">
+                <i class="ri-folder-3-line"></i>
+                <span>Projects</span>
+            </a>
+            <a href="attendance.html" class="bottom-nav-item">
+                <i class="ri-calendar-check-line"></i>
+                <span>Attendance</span>
+            </a>
+            <a href="payments.html" class="bottom-nav-item">
+                <i class="ri-wallet-3-line"></i>
+                <span>Payments</span>
+            </a>
+            <a href="#" class="bottom-nav-item" id="openMobileMenu">
+                <i class="ri-menu-4-line"></i>
+                <span>More</span>
+            </a>
+        </nav>
 
     </div>
 
-</div>
+
+    <!-- Create Task Modal -->
+    <div class="task-modal" id="taskDialog" aria-hidden="true">
+
+        <div class="task-modal-content">
+
+            <div class="task-modal-header">
+
+                <div>
+                    <h2>Create New Task</h2>
+                    <p>Add a task and assign it to a project employee.</p>
+                </div>
+
+                <button type="button" id="closeTaskModal" class="task-modal-close" aria-label="Close">&times;</button>
+
+            </div>
+
+
+            <form id="addTaskForm">
+
+                <div class="task-form-group">
+                    <label for="taskName">Task Name</label>
+
+                    <input type="text" id="taskName" maxlength="255" placeholder="Enter task name" required>
+                </div>
+
+
+                <div class="task-form-group">
+                    <label for="taskDescription">Description</label>
+
+                    <textarea id="taskDescription" placeholder="Describe the work to be completed" rows="3"></textarea>
+                </div>
+
+
+                <div class="task-form-group">
+                    <label for="taskProject">Select Project</label>
+
+                    <select id="taskProject" required>
+                        <option value="">Loading projects...</option>
+                    </select>
+                </div>
+
+
+                <div class="task-form-group">
+                    <label for="taskEmployee">Assign Employee</label>
+
+                    <select id="taskEmployee" required disabled>
+                        <option value="">First select a project</option>
+                    </select>
+
+                    <span class="task-field-hint">
+                        Only employees assigned to the selected project will appear.
+                    </span>
+                </div>
+
+
+                <div class="task-form-row">
+
+                    <div class="task-form-group">
+                        <label for="taskPriority">Priority</label>
+
+                        <select id="taskPriority" required>
+                            <option value="LOW">Low</option>
+                            <option value="MEDIUM" selected>Medium</option>
+                            <option value="HIGH">High</option>
+                        </select>
+                    </div>
+
+                    <div class="task-form-group">
+                        <label for="taskDueDate">Due Date</label>
+
+                        <input type="date" id="taskDueDate">
+                    </div>
+
+                </div>
+
+
+                <p id="taskFormMessage" class="task-form-message"></p>
+
+
+                <div class="task-modal-actions">
+
+                    <button type="button" id="cancelTask" class="task-cancel-button">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="save-task-button">
+                        Create Task
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 </body>
+
 </html>

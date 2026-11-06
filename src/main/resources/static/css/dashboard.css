@@ -1,8 +1,7 @@
 /* ===== Google Font ===== */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
 
-
-/* ===== Global ===== */
+/* ===== Reset & Base ===== */
 * {
     margin: 0;
     padding: 0;
@@ -13,15 +12,23 @@ body {
     font-family: 'DM Sans', sans-serif;
     background: #f7f5f1;
     color: #292721;
+    overflow-x: hidden;
 }
 
 .dashboard-container {
     display: flex;
     min-height: 100vh;
+    position: relative;
 }
 
+/* Hide Mobile Elements by default on Desktop */
+.mobile-header,
+.mobile-bottom-nav,
+.sidebar-overlay {
+    display: none;
+}
 
-/* ===== Sidebar ===== */
+/* ===== Desktop Sidebar ===== */
 .sidebar {
     width: 250px;
     background: #ffffff;
@@ -30,6 +37,10 @@ body {
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .brand {
@@ -39,7 +50,7 @@ body {
     padding: 0 8px;
     font-size: 15px;
     font-weight: 700;
-    margin-bottom: 45px;
+    margin-bottom: 35px;
 }
 
 .brand-logo {
@@ -51,12 +62,22 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
 }
 
 .sidebar-nav {
     flex: 1;
+    overflow-y: auto;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background: #eee9e2;
+    border-radius: 4px;
 }
 
 .nav-heading {
@@ -64,20 +85,26 @@ body {
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 1px;
-    padding: 12px 12px;
-    margin-top: 15px;
+    padding: 14px 12px 6px;
+    margin-top: 10px;
 }
 
 .nav-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     text-decoration: none;
     color: #77736d;
     font-size: 13px;
     font-weight: 500;
-    padding: 12px 14px;
+    padding: 11px 14px;
     border-radius: 8px;
     margin: 3px 0;
     transition: 0.2s ease;
+}
+
+.nav-link i {
+    font-size: 16px;
 }
 
 .nav-link:hover {
@@ -91,8 +118,11 @@ body {
     font-weight: 700;
 }
 
+.sidebar-footer {
+    padding-top: 15px;
+    border-top: 1px solid #eee9e2;
+}
 
-/* ===== Logout ===== */
 .logout-button {
     width: 100%;
     padding: 12px;
@@ -104,6 +134,10 @@ body {
     font-weight: 700;
     font-family: inherit;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     transition: 0.2s ease;
 }
 
@@ -111,14 +145,12 @@ body {
     background: #f9e2d7;
 }
 
-
 /* ===== Main Content ===== */
 .main-content {
     flex: 1;
     min-width: 0;
     padding: 30px 40px;
 }
-
 
 /* ===== Topbar ===== */
 .topbar {
@@ -137,7 +169,7 @@ body {
 .topbar p {
     color: #99938a;
     font-size: 12px;
-    margin-top: 5px;
+    margin-top: 4px;
 }
 
 .profile-info {
@@ -167,28 +199,26 @@ body {
     display: block;
     color: #99938a;
     font-size: 11px;
-    margin-top: 3px;
+    margin-top: 2px;
 }
-
 
 /* ===== Welcome Section ===== */
 .welcome-section {
-    margin: 35px 0 28px;
+    margin: 30px 0 25px;
 }
 
 .welcome-section h1 {
-    font-size: 25px;
+    font-size: 24px;
     font-weight: 800;
 }
 
 .welcome-section p {
     font-size: 13px;
     color: #99938a;
-    margin-top: 8px;
+    margin-top: 4px;
 }
 
-
-/* ===== Statistics Cards ===== */
+/* ===== Stats Grid ===== */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -200,7 +230,7 @@ body {
     background: #ffffff;
     border: 1px solid #eee9e2;
     border-radius: 12px;
-    padding: 23px 20px;
+    padding: 20px;
     transition: 0.2s ease;
 }
 
@@ -216,16 +246,15 @@ body {
 }
 
 .stat-card h2 {
-    font-size: 29px;
+    font-size: 28px;
     font-weight: 800;
-    margin: 13px 0 7px;
+    margin: 10px 0 4px;
 }
 
 .stat-card span {
     font-size: 11px;
     color: #aaa49b;
 }
-
 
 /* ===== Dashboard Panel ===== */
 .dashboard-panel {
@@ -244,14 +273,20 @@ body {
 .dashboard-panel p {
     color: #99938a;
     font-size: 13px;
-    margin-top: 12px;
+    margin-top: 10px;
     line-height: 1.6;
 }
 
+/* ==========================================
+   RESPONSIVE (Tablet & Mobile Styles)
+   ========================================== */
 
-/* ===== Responsive ===== */
+/* =========================================================
+   UNIVERSAL RESPONSIVE STYLES (All Tabs & Mobile Devices)
+   ========================================================= */
+
+/* Tablet Optimization (Screen width up to 1100px) */
 @media (max-width: 1100px) {
-
     .main-content {
         padding: 25px;
     }
@@ -261,92 +296,210 @@ body {
     }
 }
 
-@media (max-width: 700px) {
 
+/* Mobile Screen Optimization (Phones up to 768px) */
+@media (max-width: 768px) {
+    
+    /* Layout Container Reset */
     .dashboard-container {
         flex-direction: column;
-    }
-
-    .sidebar {
+        min-height: 100vh;
         width: 100%;
-        padding: 16px;
+        overflow-x: hidden;
     }
 
-    .brand {
-        margin-bottom: 15px;
+    /* 1. Fixed Top Mobile Header */
+    .mobile-header {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        background: #ffffff;
+        padding: 14px 18px;
+        border-bottom: 1px solid #eee9e2;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        z-index: 1000 !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
     }
 
-    .sidebar-nav {
-        display: none;
+    .mobile-header .brand {
+        margin-bottom: 0 !important;
+        padding: 0;
     }
 
-    .logout-button {
-        margin-top: 10px;
+    .menu-toggle {
+        background: transparent;
+        border: none;
+        font-size: 24px;
+        color: #292721;
+        cursor: pointer;
+        padding: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
     }
 
+    .desktop-only {
+        display: none !important;
+    }
+
+    /* 2. Slide-over Mobile Navigation Drawer */
+    .sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: -290px !important; /* Kept off-screen by default */
+        width: 270px !important;
+        height: 100vh !important;
+        background: #ffffff !important;
+        z-index: 1002 !important;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 20px 18px !important;
+    }
+
+    /* Triggered by JS when opening menu */
+    .sidebar.open {
+        left: 0 !important;
+    }
+
+    /* Backdrop Overlay Screen */
+    .sidebar-overlay {
+        display: block !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+        backdrop-filter: blur(2px);
+        z-index: 1001 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: opacity 0.3s ease !important;
+    }
+
+    .sidebar-overlay.active {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    /* 3. Main Content Spacing & Clickability Fix */
     .main-content {
-        padding: 20px;
+        width: 100% !important;
+        padding-top: 80px !important;  /* Prevents content behind top header */
+        padding-bottom: 85px !important; /* Prevents content behind bottom nav */
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        position: relative !important;
+        z-index: 10 !important; /* Ensures buttons/forms inside main content are top clickable */
     }
 
+    /* Header & Action Button Click Fixes */
     .topbar {
+        flex-direction: column-reverse;
+        align-items: flex-start;
         gap: 15px;
+        padding-bottom: 18px;
+    }
+
+    .topbar h2 {
+        font-size: 20px;
+    }
+
+    .profile-info {
+        width: 100%;
+        justify-content: flex-end;
+        border-bottom: 1px dashed #eee9e2;
+        padding-bottom: 10px;
+    }
+
+    .welcome-section {
+        margin: 20px 0;
     }
 
     .welcome-section h1 {
-        font-size: 21px;
+        font-size: 20px;
     }
 
+    /* Buttons (+ Add New Project, Forms, Submits) Mobile Styling */
+    .add-project-button,
+    .btn-primary,
+    .welcome-section button,
+    .dashboard-panel button {
+        width: 100% !important;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative !important;
+        z-index: 20 !important; /* Above any section backgrounds */
+        touch-action: manipulation !important;
+        cursor: pointer !important;
+    }
+
+    /* Cards & Grids Layout Adjustments */
     .stats-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 12px;
     }
-}
-/* Mobile Responsive Sidebar Navigation */
 
-@media (max-width: 768px) {
+    .stat-card {
+        padding: 16px;
+    }
 
-    .dashboard-container {
+    .stat-card h2 {
+        font-size: 24px;
+        margin: 8px 0 4px;
+    }
+
+    .dashboard-panel {
+        padding: 18px;
+    }
+
+    /* 4. Native App Style Fixed Bottom Navigation Bar */
+    .mobile-bottom-nav {
+        display: flex !important;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 62px !important;
+        background: #ffffff !important;
+        border-top: 1px solid #eee9e2 !important;
+        z-index: 999 !important;
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.04);
+    }
+
+    .bottom-nav-item {
         display: flex;
         flex-direction: column;
-        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        text-decoration: none;
+        color: #99938a;
+        font-size: 10px;
+        font-weight: 600;
+        width: 20%;
+        height: 100%;
+        touch-action: manipulation;
+        transition: color 0.2s ease;
     }
 
-    .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        min-height: 0;
-        padding: 20px;
-        box-sizing: border-box;
+    .bottom-nav-item i {
+        font-size: 20px;
     }
 
-    .sidebar-nav {
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-        width: 100%;
-        margin-top: 20px;
-        overflow: visible;
-    }
-
-    .sidebar-nav .nav-heading {
-        grid-column: 1 / -1;
-        margin: 12px 0 4px;
-    }
-
-    .sidebar-nav .nav-link {
-        min-width: 0;
-        padding: 12px;
-    }
-
-    .logout-button {
-        width: 100%;
-        margin-top: 16px;
-    }
-
-    .main-content {
-        width: 100%;
-        min-width: 0;
-        margin-left: 0;
-        box-sizing: border-box;
+    .bottom-nav-item.active {
+        color: #d97745;
+        font-weight: 700;
     }
 }

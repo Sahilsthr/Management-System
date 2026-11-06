@@ -1,281 +1,254 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Projects | Furniture Management</title>
 
+    <!-- Favicon Fix -->
+    <link rel="icon" href="data:,">
+
+    <!-- Font Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!-- CSS Stylesheets -->
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/projects.css">
 
+    <!-- JavaScript Scripts -->
+    <script src="js/dashboard.js" defer></script>
     <script src="js/projects.js" defer></script>
 </head>
 
 <body>
-
     <div class="dashboard-container">
 
-        <!-- Sidebar -->
-        <aside class="sidebar">
-
+        <!-- Mobile Top Header -->
+        <div class="mobile-header">
             <div class="brand">
                 <div class="brand-logo">F</div>
                 <span>Furniture Management</span>
             </div>
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+                <i class="ri-menu-line"></i>
+            </button>
+        </div>
 
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand desktop-only">
+                <div class="brand-logo">F</div>
+                <span>Furniture Management</span>
+            </div>
             <nav class="sidebar-nav">
-
                 <p class="nav-heading">MAIN MENU</p>
-
-                <a href="admin-dashboard.html" class="nav-link">Dashboard</a>
-                <a href="clients.html" class="nav-link">Clients</a>
-                <a href="projects.html" class="nav-link active">Projects</a>
-                <a href="sites.html" class="nav-link">Sites</a>
+                <a href="admin-dashboard.html" class="nav-link">
+                    <i class="ri-dashboard-line"></i> Dashboard
+                </a>
+                <a href="clients.html" class="nav-link">
+                    <i class="ri-user-star-line"></i> Clients
+                </a>
+                <a href="projects.html" class="nav-link active">
+                    <i class="ri-folder-3-line"></i> Projects
+                </a>
+                <a href="sites.html" class="nav-link">
+                    <i class="ri-map-pin-line"></i> Sites
+                </a>
 
                 <p class="nav-heading">MANAGEMENT</p>
-
-                <a href="employees.html" class="nav-link">Employees</a>
-                <a href="tasks.html" class="nav-link">Tasks</a>
-                <a href="attendance.html" class="nav-link">Attendance</a>
+                <a href="employees.html" class="nav-link">
+                    <i class="ri-team-line"></i> Employees
+                </a>
+                <a href="tasks.html" class="nav-link">
+                    <i class="ri-task-line"></i> Tasks
+                </a>
+                <a href="attendance.html" class="nav-link">
+                    <i class="ri-calendar-check-line"></i> Attendance
+                </a>
 
                 <p class="nav-heading">FINANCE</p>
-
-                <a href="payments.html" class="nav-link">Payments</a>
-                <a href="expenses.html" class="nav-link">Expenses</a>
-                <a href="reports.html" class="nav-link">Reports</a>
-
+                <a href="payments.html" class="nav-link">
+                    <i class="ri-wallet-3-line"></i> Payments
+                </a>
+                <a href="expenses.html" class="nav-link">
+                    <i class="ri-money-dollar-box-line"></i> Expenses
+                </a>
+                <a href="reports.html" class="nav-link">
+                    <i class="ri-file-chart-line"></i> Reports
+                </a>
             </nav>
 
-            <button id="logoutButton" class="logout-button">
-                Logout
-            </button>
-
+            <div class="sidebar-footer">
+                <button id="logoutButton" class="logout-button">
+                    <i class="ri-logout-box-r-line"></i> Logout
+                </button>
+            </div>
         </aside>
 
+        <!-- Sidebar Backdrop Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <!-- Main Content -->
+        <!-- Main Content Body -->
         <main class="main-content">
 
+            <!-- Topbar Header -->
             <header class="topbar">
-
                 <div>
                     <h2>Projects</h2>
                     <p>Manage your business projects.</p>
                 </div>
-
                 <div class="profile-info">
                     <div class="profile-avatar">A</div>
-
                     <div>
                         <strong id="adminName">Administrator</strong>
                         <small>Admin</small>
                     </div>
                 </div>
-
             </header>
 
-
-            <!-- Page Heading -->
+            <!-- Projects Heading -->
             <section class="projects-heading">
-
                 <div>
                     <h1>Project Management</h1>
                     <p>Manage projects, clients and project budgets.</p>
                 </div>
-
                 <button id="addProjectButton" class="add-project-button">
                     + Add New Project
                 </button>
-
             </section>
 
-
-            <!-- Project Statistics -->
+            <!-- Project Summary Stats -->
             <section class="project-summary">
-
                 <div class="stat-card">
-                    <p>Total Projects</p>
-                    <h2 id="totalProjects">--</h2>
-                    <span>All registered projects</span>
+                    <h3>Total Projects</h3>
+                    <p id="totalProjects">0</p>
                 </div>
-
                 <div class="stat-card">
-                    <p>Active Projects</p>
-                    <h2 id="activeProjects">--</h2>
-                    <span>Currently in progress</span>
+                    <h3>Active Projects</h3>
+                    <p id="activeProjects">0</p>
                 </div>
-
                 <div class="stat-card">
-                    <p>Completed Projects</p>
-                    <h2 id="completedProjects">--</h2>
-                    <span>Successfully completed</span>
+                    <h3>Completed Projects</h3>
+                    <p id="completedProjects">0</p>
                 </div>
-
             </section>
 
-
-            <!-- Project List -->
+            <!-- Main Project Panel & Table -->
             <section class="project-panel">
-
                 <div class="project-toolbar">
-
                     <div>
                         <h2>All Projects</h2>
-                        <p>View and manage your project details.</p>
+                        <p id="projectsMessage">Your project records and status will display here.</p>
                     </div>
-
-                    <input
-                        type="search"
-                        id="searchProjects"
-                        placeholder="Search projects...">
-
+                    <input type="text" id="searchProjects" placeholder="Search projects...">
                 </div>
 
-
                 <div class="table-container">
-
                     <table class="projects-table">
-
                         <thead>
                             <tr>
-                                <th>Project ID</th>
+                                <th>ID</th>
                                 <th>Project Name</th>
                                 <th>Client</th>
                                 <th>Start Date</th>
-                                <th>Expected End</th>
+                                <th>Expected End Date</th>
                                 <th>Budget</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
-
                         <tbody id="projectsTableBody">
-
-                            <tr>
-                                <td colspan="7">Loading projects...</td>
-                            </tr>
-
+                            <!-- JS Loaded Data -->
                         </tbody>
-
                     </table>
-
                 </div>
-
-                <p id="projectsMessage" role="status"></p>
-
             </section>
 
         </main>
 
+        <!-- Add Project Modal Dialog -->
+        <dialog id="projectDialog" class="project-dialog">
+            <div class="modal-header">
+                <h2>Add New Project</h2>
+                <button type="button" id="closeProjectModal">&times;</button>
+            </div>
+
+            <p class="modal-subtitle">Fill in the project details below to add a new record.</p>
+            <p id="projectFormMessage"></p>
+
+            <form id="addProjectForm">
+                <div class="modal-form-group">
+                    <label for="projectName">Project Name</label>
+                    <input type="text" id="projectName" placeholder="Enter project name" required>
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="projectDescription">Description</label>
+                    <textarea id="projectDescription" placeholder="Enter project description"></textarea>
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="projectClient">Client</label>
+                    <select id="projectClient" required>
+                        <option value="">Select a client</option>
+                    </select>
+                </div>
+
+                <!-- Date Fields Grid -->
+                <div class="date-fields">
+                    <div class="modal-form-group">
+                        <label for="startDate">Start Date</label>
+                        <input type="date" id="startDate" required>
+                    </div>
+                    <div class="modal-form-group">
+                        <label for="expectedEndDate">Expected End Date</label>
+                        <input type="date" id="expectedEndDate" required>
+                    </div>
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="totalAmount">Total Budget (INR)</label>
+                    <input type="number" id="totalAmount" placeholder="e.g. 50000" required>
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="projectStatus">Status</label>
+                    <select id="projectStatus">
+                        <option value="PLANNED">Planned</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="CANCELLED">Cancelled</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="cancelProject">Cancel</button>
+                    <button type="submit" class="save-project-button">Save Project</button>
+                </div>
+            </form>
+        </dialog>
+
+        <!-- Mobile Bottom Navigation -->
+        <nav class="mobile-bottom-nav">
+            <a href="admin-dashboard.html" class="bottom-nav-item">
+                <i class="ri-dashboard-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="projects.html" class="bottom-nav-item active">
+                <i class="ri-folder-3-line"></i>
+                <span>Projects</span>
+            </a>
+            <a href="attendance.html" class="bottom-nav-item">
+                <i class="ri-calendar-check-line"></i>
+                <span>Attendance</span>
+            </a>
+            <a href="payments.html" class="bottom-nav-item">
+                <i class="ri-wallet-3-line"></i>
+                <span>Payments</span>
+            </a>
+        </nav>
+
     </div>
-
-
-    <!-- Add Project Modal -->
-    <dialog id="projectDialog" class="project-dialog">
-
-        <div class="modal-header">
-            <h2>Add New Project</h2>
-
-            <button type="button" id="closeProjectModal">×</button>
-        </div>
-
-        <p class="modal-subtitle">
-            Enter the details of your new project.
-        </p>
-
-
-        <form id="addProjectForm">
-
-            <div class="modal-form-group">
-                <label for="projectName">Project Name</label>
-                <input
-                    type="text"
-                    id="projectName"
-                    maxlength="255"
-                    placeholder="Enter project name"
-                    required>
-            </div>
-
-
-            <div class="modal-form-group">
-                <label for="projectDescription">Description</label>
-                <textarea
-                    id="projectDescription"
-                    maxlength="255"
-                    rows="3"
-                    placeholder="Describe the project"
-                    required></textarea>
-            </div>
-
-
-            <div class="modal-form-group">
-                <label for="projectClient">Select Client</label>
-
-                <select id="projectClient" required>
-                    <option value="">Loading clients...</option>
-                </select>
-            </div>
-
-
-            <div class="date-fields">
-
-                <div class="modal-form-group">
-                    <label for="startDate">Start Date</label>
-                    <input type="date" id="startDate" required>
-                </div>
-
-                <div class="modal-form-group">
-                    <label for="expectedEndDate">Expected End Date</label>
-                    <input type="date" id="expectedEndDate" required>
-                </div>
-
-            </div>
-
-
-            <div class="modal-form-group">
-                <label for="totalAmount">Project Budget (₹)</label>
-                <input
-                    type="number"
-                    id="totalAmount"
-                    min="0"
-                    step="0.01"
-                    placeholder="Enter project budget"
-                    required>
-            </div>
-
-
-            <div class="modal-form-group">
-                <label for="projectStatus">Project Status</label>
-
-                <select id="projectStatus" required>
-                    <option value="PLANNED">Planned</option>
-                    <option value="IN_PROGRESS">In Progress</option>
-                    <option value="COMPLETED">Completed</option>
-                    <option value="CANCELLED">Cancelled</option>
-                </select>
-            </div>
-
-
-            <p id="projectFormMessage" role="alert"></p>
-
-
-            <div class="modal-actions">
-
-                <button type="button" id="cancelProject">
-                    Cancel
-                </button>
-
-                <button type="submit" class="save-project-button">
-                    Save Project
-                </button>
-
-            </div>
-
-        </form>
-
-    </dialog>
-
 </body>
+
 </html>
